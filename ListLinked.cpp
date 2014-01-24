@@ -1,21 +1,15 @@
 #include "ListLinked.h"
 
-template <typename DataType> 
-ListNode::ListNode(const DataType& nodeData, ListNode* nextPtr)
-{
-   dataItem = nodeData;
-   next = nextPtr;
-}
 
 template <typename DataType>
-List::List(int ignored = 0);
+List<DataType>::List(int ignored )
 {
    head = NULL;
    cursor = NULL;
 }
 
 template <typename DataType>
-List::List(const List& other)
+List<DataType>::List(const List& other)
 {
    if( other.isEmpty() )
    {
@@ -45,7 +39,7 @@ List::List(const List& other)
 }
 
 template <typename DataType>
-List& List::operator=(const List& other)
+List<DataType>& List<DataType>::operator=(const List& other)
 {
    if( !isEmpty() )
    {
@@ -79,7 +73,7 @@ List& List::operator=(const List& other)
 }
 
 template <typename DataType>
-List::~List()
+List<DataType>::~List()
 {
    if( !isEmpty() )
    {
@@ -98,7 +92,7 @@ List::~List()
    }
 }
 template <typename DataType>
-void List::insert(const DataType& newDataItem) throw (logic_error)
+void List<DataType>::insert(const DataType& newDataItem) throw (logic_error)
 {
    if( isEmpty() )
    {
@@ -125,7 +119,7 @@ void List::insert(const DataType& newDataItem) throw (logic_error)
 }
 
 template <typename DataType>
-void List::remove() throw (logic_error)
+void List<DataType>::remove() throw (logic_error)
 {
    if(!isEmpty())
    {
@@ -157,7 +151,7 @@ void List::remove() throw (logic_error)
 }
 
 template <typename DataType>
-void List::replace(const DataType& newDataItem) throw (logic_error)
+void List<DataType>::replace(const DataType& newDataItem) throw (logic_error)
 {
    if( !isEmpty() )
    {
@@ -167,7 +161,7 @@ void List::replace(const DataType& newDataItem) throw (logic_error)
 }
 
 template <typename DataType>
-void List::clear()
+void List<DataType>::clear()
 {
    if( !isEmpty() )
    {
@@ -188,7 +182,7 @@ void List::clear()
 }
 
 template <typename DataType>
-bool List:isEmpty() const
+bool List<DataType>::isEmpty() const
 {
    if( head == NULL )
    {
@@ -198,13 +192,13 @@ bool List:isEmpty() const
 }
 
 template <typename DataType>
-bool List::isFull()
+bool List<DataType>::isFull() const
 {
    return false;
 }
 
 template <typename DataType>
-void List::gotoBeginning() throw (logic_error)
+void List<DataType>::gotoBeginning() throw (logic_error)
 {
    if( !isEmpty() )
    {
@@ -214,7 +208,7 @@ void List::gotoBeginning() throw (logic_error)
 }
 
 template <typename DataType>
-void List::gotoEnd() throw (logic error)
+void List<DataType>::gotoEnd() throw (logic error)
 {
    if( !isEmpty() )
    {
@@ -227,7 +221,7 @@ void List::gotoEnd() throw (logic error)
 }
 
 template <typename DataType>
-bool List::gotoNext() throw (logic error)
+bool List<DataType>::gotoNext() throw (logic error)
 {
    if( isEmpty() )
    {
@@ -245,7 +239,7 @@ bool List::gotoNext() throw (logic error)
 }
 
 template <typename DataType>
-bool List::gotoPrior() throw (logic error)
+bool List<DataType>::gotoPrior() throw (logic error)
 {
    if( isEmpty() )
    {
@@ -268,10 +262,16 @@ bool List::gotoPrior() throw (logic error)
 }
 
 template <typename DataType>
-DataType List::getCursor() const throw (logic error)
+DataType List<DataType>::getCursor() const throw (logic error)
 {
    if( !isEmpty() )
    {
       return cursor->dataItem;
    }
+}
+template <typename DataType> 
+ListNode<DataType>::ListNode(const DataType& nodeData, ListNode* nextPtr)
+{
+   dataItem = nodeData;
+   next = nextPtr;
 }
