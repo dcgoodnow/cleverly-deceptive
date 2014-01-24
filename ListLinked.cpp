@@ -15,6 +15,89 @@ List::List(int ignored = 0);
 }
 
 template <typename DataType>
+List::List(const List& other)
+{
+   if( other.isEmpty() )
+   {
+      head = NULL;
+      cursor = NULL;
+   }
+   else
+   {
+      ListNode* srcNode = other.head;
+      ListNode* destNode = new ListNode( srcNode->dataItem, NULL);
+      head = destNode;
+      if( other.cursor == srcNode )
+      {
+         cursor = destNode;
+      }
+      while( srcNode->next != NULL )
+      {
+         srcNode = srcNode->next;
+         destNode->next = new ListNode( srcNode->dataItem, NULL);
+         destNode = destNode->next;
+         if( other.cursor == srcNode )
+         {
+            cursor = destNode;
+         }
+      }
+   }
+}
+
+template <typename DataType>
+List& List::operator=(const List& other)
+{
+   if( !isEmpty() )
+   {
+      clear();
+   }
+   if( other.isEmpty() )
+   {
+      head = NULL;
+      cursor = NULL;
+   }
+   else
+   {
+      ListNode* srcNode = other.head;
+      ListNode* destNode = new ListNode( srcNode->dataItem, NULL);
+      head = destNode;
+      if( other.cursor == srcNode )
+      {
+         cursor = destNode;
+      }
+      while( srcNode->next != NULL )
+      {
+         srcNode = srcNode->next;
+         destNode->next = new ListNode( srcNode->dataItem, NULL);
+         destNode = destNode->next;
+         if( other.cursor == srcNode )
+         {
+            cursor = destNode;
+         }
+      }
+   }
+}
+
+template <typename DataType>
+List::~List()
+{
+   if( !isEmpty() )
+   {
+      cursor = head;
+      ListNode* nodeTmp = cursor;
+      cursor = cursor->next;
+      delete nodeTmp;
+      while(cursor != NULL)
+      {
+         nodeTmp = cursor;
+         cursor = cursor->next;
+         delete nodeTmp;
+      }
+      head = NULL;
+      cursor = NULL;
+   }
+}
+template <typename DataType>
 void List::insert(const DataType& newDataItem) throw (logic_error)
 {
    if( isEmpty() )
@@ -99,6 +182,7 @@ void List::clear()
          delete nodeTmp;
       }
       head = NULL;
+      cursor = NULL;
    }
    return;
 }
@@ -117,4 +201,77 @@ template <typename DataType>
 bool List::isFull()
 {
    return false;
+}
+
+template <typename DataType>
+void List::gotoBeginning() throw (logic_error)
+{
+   if( !isEmpty() )
+   {
+      cursor = head;
+   }
+   return;
+}
+
+template <typename DataType>
+void List::gotoEnd() throw (logic error)
+{
+   if( !isEmpty() )
+   {
+      while( cursor->next != NULL )
+      {
+         cursor = cursor->next;
+      }
+   }
+   return;
+}
+
+template <typename DataType>
+bool List::gotoNext() throw (logic error)
+{
+   if( isEmpty() )
+   {
+      return false;
+   }
+   else if( cursor->next == NULL )
+   {
+      return false;
+   }
+   else
+   {
+      cursor = cursor->next;
+      return true;
+   }
+}
+
+template <typename DataType>
+bool List::gotoPrior() throw (logic error)
+{
+   if( isEmpty() )
+   {
+      return false;
+   }
+   else if( cursor == head )
+   {
+      return false;
+   }
+   else
+   {
+      ListNode* nodeTmp = cursor;
+      cursor = head;
+      while(cursor->next != nodeTmp )
+      {
+         cursor = cursor->next;
+      }
+      return true;
+   }
+}
+
+template <typename DataType>
+DataType List::getCursor() const throw (logic error)
+{
+   if( !isEmpty() )
+   {
+      return cursor->dataItem;
+   }
 }
