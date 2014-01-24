@@ -155,7 +155,7 @@ void List<DataType>::replace(const DataType& newDataItem) throw (logic_error)
 {
    if( !isEmpty() )
    {
-      cursor->data = newDataItem;
+      cursor->dataItem= newDataItem;
    }
    return;
 }
@@ -198,7 +198,7 @@ bool List<DataType>::isFull() const
 }
 
 template <typename DataType>
-void List<DataType>::gotoBeginning() throw (logic_error)
+void List<DataType>::gotoBeginning() throw(logic_error)
 {
    if( !isEmpty() )
    {
@@ -221,7 +221,7 @@ void List<DataType>::gotoEnd() throw (logic error)
 }
 
 template <typename DataType>
-bool List<DataType>::gotoNext() throw (logic error)
+bool List<DataType>::gotoNext() throw(logic error)
 {
    if( isEmpty() )
    {
@@ -269,8 +269,8 @@ DataType List<DataType>::getCursor() const throw (logic error)
       return cursor->dataItem;
    }
 }
-template <typename DataType> 
-ListNode<DataType>::ListNode(const DataType& nodeData, ListNode* nextPtr)
+template <typename DataType>
+List<DataType>::ListNode::ListNode(const DataType& nodeData, ListNode* nextPtr)
 {
    dataItem = nodeData;
    next = nextPtr;
