@@ -1,4 +1,5 @@
 #include "ListLinked.h"
+#include <iostream>
 
 
 template <typename DataType>
@@ -134,15 +135,26 @@ void List<DataType>::remove() throw (logic_error)
          }
          else
          {
-            gotoPrior();
+				gotoPrior();
+				cursor->next = NULL;
+				cursor = head;
          }
          delete nodeTmp;
          nodeTmp = NULL;
       }
       else
       {
-         gotoPrior();
-         cursor->next = nodeTmp->next;
+			if( cursor == head )
+			{
+				cursor = cursor->next;
+				head = cursor;
+			}
+			else
+			{
+				gotoPrior();
+				cursor->next = nodeTmp->next;
+				cursor->next;
+			}
          delete nodeTmp;
          nodeTmp = NULL;
       }
@@ -208,7 +220,7 @@ void List<DataType>::gotoBeginning() throw(logic_error)
 }
 
 template <typename DataType>
-void List<DataType>::gotoEnd() throw (logic error)
+void List<DataType>::gotoEnd() throw (logic_error)
 {
    if( !isEmpty() )
    {
@@ -221,7 +233,7 @@ void List<DataType>::gotoEnd() throw (logic error)
 }
 
 template <typename DataType>
-bool List<DataType>::gotoNext() throw(logic error)
+bool List<DataType>::gotoNext() throw(logic_error)
 {
    if( isEmpty() )
    {
@@ -239,7 +251,7 @@ bool List<DataType>::gotoNext() throw(logic error)
 }
 
 template <typename DataType>
-bool List<DataType>::gotoPrior() throw (logic error)
+bool List<DataType>::gotoPrior() throw (logic_error)
 {
    if( isEmpty() )
    {
@@ -262,12 +274,72 @@ bool List<DataType>::gotoPrior() throw (logic error)
 }
 
 template <typename DataType>
-DataType List<DataType>::getCursor() const throw (logic error)
+DataType List<DataType>::getCursor() const throw (logic_error)
 {
    if( !isEmpty() )
    {
       return cursor->dataItem;
    }
+}
+
+template <typename DataType>
+void List<DataType>::moveToBeginning () throw (logic_error)
+{
+	if( !isEmpty() )
+	{
+		if(cursor != head)
+		{
+			ListNode* nodeTmp = cursor;
+			gotoPrior();
+			cursor->next = nodeTmp->next;
+			cursor = new ListNode(nodeTmp->dataItem, head);
+			head = cursor;
+			delete nodeTmp;
+			nodeTmp = NULL;
+		}
+	}
+}
+
+template <typename DataType>
+void List<DataType>::insertBefore(const DataType& newDataItem) throw (logic_error)
+{
+	if( isEmpty() )
+	{
+		head = new ListNode(newDataItem, NULL);
+		cursor = head;
+	}
+	else
+	{
+		ListNode* newNode = new ListNode(cursor->dataItem, cursor->next);
+		cursor->dataItem = newDataItem;
+		cursor->next = newNode;
+	}
+}
+template <typename DataType>
+void List<DataType>::showStructure() const
+{
+	if( isEmpty() )
+	{
+		cout << "Empty list" << endl;	
+	}
+	else
+	{
+		ListNode* nodeTmp = head;
+		while(nodeTmp != NULL)
+		{
+			if(nodeTmp == cursor)
+			{
+				cout << '[' << nodeTmp->dataItem << "] ";
+			}
+			else
+			{
+				cout << nodeTmp->dataItem << ' ';
+			}
+			nodeTmp = nodeTmp->next;
+		}
+		cout << endl;
+	}
+	return;
 }
 template <typename DataType>
 List<DataType>::ListNode::ListNode(const DataType& nodeData, ListNode* nextPtr)
