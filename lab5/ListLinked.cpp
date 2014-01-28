@@ -10,6 +10,7 @@
 
 #include "ListLinked.h"
 #include <iostream>
+using namespace std;
 /**
  * @brief Default constructor for the List
  * @param ignored only used for array based implementations
@@ -46,11 +47,15 @@ List<DataType>::List(const List& other)
 		{
 			cursor = destNode;
 		}
+
+		//copy all remaining nodes from source list
 		while( srcNode->next != NULL )
 		{
 			srcNode = srcNode->next;
 			destNode->next = new ListNode( srcNode->dataItem, NULL);
 			destNode = destNode->next;
+
+			//check for source cursor at this node
 			if( other.cursor == srcNode )
 			{
 				cursor = destNode;
@@ -66,10 +71,12 @@ List<DataType>::List(const List& other)
 template <typename DataType>
 List<DataType>& List<DataType>::operator=(const List& other)
 {
+	//cannot assign a list to itself
 	if(this != &other)
 	{
 		if( !isEmpty() )
 		{
+			//start with an empty list
 			clear();
 		}
 		if( other.isEmpty() )
@@ -86,11 +93,15 @@ List<DataType>& List<DataType>::operator=(const List& other)
 			{
 				cursor = destNode;
 			}
+			
+			//copy all nodes from source list
 			while( srcNode->next != NULL )
 			{
 				srcNode = srcNode->next;
 				destNode->next = new ListNode( srcNode->dataItem, NULL);
 				destNode = destNode->next;
+
+				//check for source cursor at this node
 				if( other.cursor == srcNode )
 				{
 					cursor = destNode;
@@ -105,12 +116,18 @@ List<DataType>& List<DataType>::operator=(const List& other)
 template <typename DataType>
 List<DataType>::~List()
 {
+	//no action is necessary if list is already empty
 	if( !isEmpty() )
 	{
+		//start from beginning
 		cursor = head;
 		ListNode* nodeTmp = cursor;
+		
+		//move cursor to next node
 		cursor = cursor->next;
 		delete nodeTmp;
+
+		//loop until cursor has passed the last node
 		while(cursor != NULL)
 		{
 			nodeTmp = cursor;
@@ -130,6 +147,7 @@ List<DataType>::~List()
 template <typename DataType>
 void List<DataType>::insert(const DataType& newDataItem) throw (logic_error)
 {
+	//case of a new list
 	if( isEmpty() )
 	{
 		head = new ListNode(newDataItem, NULL);
@@ -138,6 +156,7 @@ void List<DataType>::insert(const DataType& newDataItem) throw (logic_error)
 
 	else if( !isFull() )
 	{
+		//cursor is at the tail of the list
 		if( cursor->next == NULL)
 		{
 			cursor->next = new ListNode(newDataItem, NULL);
@@ -166,10 +185,13 @@ void List<DataType>::remove() throw (logic_error)
 	{
 		ListNode* nodeTmp = cursor;
 
+		//cursor is at the tail
 		if(cursor->next == NULL)
 		{
+			//cursor is at the head AND tail
 			if(cursor == head)
 			{
+				//set the list to empty
 				cursor = NULL;
 				head = NULL;
 			}
@@ -177,6 +199,8 @@ void List<DataType>::remove() throw (logic_error)
 			{
 				gotoPrior();
 				cursor->next = NULL;
+				
+				//move cursor to beginning
 				cursor = head;
 			}
 			delete nodeTmp;
@@ -186,6 +210,7 @@ void List<DataType>::remove() throw (logic_error)
 		{
 			if( cursor == head )
 			{
+				//when removing the head, the head must be moved to the next node
 				cursor = cursor->next;
 				head = cursor;
 			}
@@ -211,7 +236,7 @@ void List<DataType>::replace(const DataType& newDataItem) throw (logic_error)
 {
 	if( !isEmpty() )
 	{
-		cursor->dataItem= newDataItem;
+		cursor->dataItem = newDataItem;
 	}
 	return;
 }
@@ -225,10 +250,14 @@ void List<DataType>::clear()
 {
 	if( !isEmpty() )
 	{
+		//start from beginning
 		cursor = head;
+
 		ListNode* nodeTmp = cursor;
 		cursor = cursor->next;
 		delete nodeTmp;
+
+		//move through list deleting nodes until cursor has passed the tail
 		while(cursor != NULL)
 		{
 			nodeTmp = cursor;
@@ -286,6 +315,7 @@ void List<DataType>::gotoEnd() throw (logic_error)
 {
 	if( !isEmpty() )
 	{
+		//loop until cursor is at tail
 		while( cursor->next != NULL )
 		{
 			cursor = cursor->next;
@@ -301,10 +331,13 @@ void List<DataType>::gotoEnd() throw (logic_error)
 template <typename DataType>
 bool List<DataType>::gotoNext() throw(logic_error)
 {
+	//cannot move in an empty list
 	if( isEmpty() )
 	{
 		return false;
 	}
+
+	//cannot go to next if at end
 	else if( cursor->next == NULL )
 	{
 		return false;
@@ -323,10 +356,13 @@ bool List<DataType>::gotoNext() throw(logic_error)
 template <typename DataType>
 bool List<DataType>::gotoPrior() throw (logic_error)
 {
+	//cannot move in an empty list
 	if( isEmpty() )
 	{
 		return false;
 	}
+
+	//cannot go back if at beginning
 	else if( cursor == head )
 	{
 		return false;
@@ -335,6 +371,8 @@ bool List<DataType>::gotoPrior() throw (logic_error)
 	{
 		ListNode* nodeTmp = cursor;
 		cursor = head;
+
+		//loop until cursor is found
 		while(cursor->next != nodeTmp )
 		{
 			cursor = cursor->next;
@@ -385,6 +423,7 @@ void List<DataType>::moveToBeginning () throw (logic_error)
 template <typename DataType>
 void List<DataType>::insertBefore(const DataType& newDataItem) throw (logic_error)
 {
+	//case of new list
 	if( isEmpty() )
 	{
 		head = new ListNode(newDataItem, NULL);
@@ -392,7 +431,10 @@ void List<DataType>::insertBefore(const DataType& newDataItem) throw (logic_erro
 	}
 	else
 	{
+		//copy cursor node
 		ListNode* newNode = new ListNode(cursor->dataItem, cursor->next);
+
+		//make cursor node the new node and point it to its old copy
 		cursor->dataItem = newDataItem;
 		cursor->next = newNode;
 	}
@@ -413,12 +455,17 @@ void List<DataType>::showStructure() const
 	else
 	{
 		ListNode* nodeTmp = head;
+
+		//loop through all nodes
 		while(nodeTmp != NULL)
 		{
+			//print brackets around cursor
 			if(nodeTmp == cursor)
 			{
 				cout << '[' << nodeTmp->dataItem << "] ";
 			}
+			
+			//print data members delimited by spaces
 			else
 			{
 				cout << nodeTmp->dataItem << ' ';
