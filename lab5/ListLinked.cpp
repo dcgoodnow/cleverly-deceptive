@@ -1,6 +1,22 @@
+/**
+ * @file "ListLinked.cpp"
+ * @mainpage Singly Linked List
+ * @detail This is the implementation for a singly linked list as specified in
+ * ListLinked.h. It contains all necessary functions to perform basic operations
+ * on the list. It also utilizes a private ListNode class to create nodes which
+ * are only accessible to instantiated list objects.
+*/
+
+
 #include "ListLinked.h"
 #include <iostream>
-
+/**
+ * @brief Default constructor for the List
+ * @param ignored only used for array based implementations
+ * @pre the list is non existent
+ * @post the list is instantiated
+ *	
+*/
 
 template <typename DataType>
 List<DataType>::List(int ignored )
@@ -9,6 +25,10 @@ List<DataType>::List(int ignored )
 	cursor = NULL;
 }
 
+/**
+ * @brief Copy Constructor for list
+ * @param other list to be copied from
+*/
 template <typename DataType>
 List<DataType>::List(const List& other)
 {
@@ -39,40 +59,49 @@ List<DataType>::List(const List& other)
 	}
 }
 
+/**
+ * @brief Assignment operator
+ * @param other list from which to assign
+*/
 template <typename DataType>
 List<DataType>& List<DataType>::operator=(const List& other)
 {
-	if( !isEmpty() )
+	if(this != &other)
 	{
-		clear();
-	}
-	if( other.isEmpty() )
-	{
-		head = NULL;
-		cursor = NULL;
-	}
-	else
-	{
-		ListNode* srcNode = other.head;
-		ListNode* destNode = new ListNode( srcNode->dataItem, NULL);
-		head = destNode;
-		if( other.cursor == srcNode )
+		if( !isEmpty() )
 		{
-			cursor = destNode;
+			clear();
 		}
-		while( srcNode->next != NULL )
+		if( other.isEmpty() )
 		{
-			srcNode = srcNode->next;
-			destNode->next = new ListNode( srcNode->dataItem, NULL);
-			destNode = destNode->next;
+			head = NULL;
+			cursor = NULL;
+		}
+		else
+		{
+			ListNode* srcNode = other.head;
+			ListNode* destNode = new ListNode( srcNode->dataItem, NULL);
+			head = destNode;
 			if( other.cursor == srcNode )
 			{
 				cursor = destNode;
 			}
+			while( srcNode->next != NULL )
+			{
+				srcNode = srcNode->next;
+				destNode->next = new ListNode( srcNode->dataItem, NULL);
+				destNode = destNode->next;
+				if( other.cursor == srcNode )
+				{
+					cursor = destNode;
+				}
+			}
 		}
 	}
 }
-
+/**
+ * @brief Destructor
+*/
 template <typename DataType>
 List<DataType>::~List()
 {
@@ -92,6 +121,12 @@ List<DataType>::~List()
 		cursor = NULL;
 	}
 }
+
+/**
+ * @brief Inserts new node after cursor
+ * @param newDataItem Data item to be inserted.
+ * @post Cursor points to new node after insertion
+*/
 template <typename DataType>
 void List<DataType>::insert(const DataType& newDataItem) throw (logic_error)
 {
@@ -119,6 +154,11 @@ void List<DataType>::insert(const DataType& newDataItem) throw (logic_error)
 	return;
 }
 
+/**
+ * @brief Removes node at cursor
+ * @post Cursor moves to following node except when at the tail, in which case it moves
+ * to the beginning
+*/
 template <typename DataType>
 void List<DataType>::remove() throw (logic_error)
 {
@@ -162,6 +202,10 @@ void List<DataType>::remove() throw (logic_error)
 	return;
 }
 
+/**
+ * @brief Replaces data member at cursor.
+ * @param newDataItem The data item to replace the existing item with
+*/
 template <typename DataType>
 void List<DataType>::replace(const DataType& newDataItem) throw (logic_error)
 {
@@ -172,6 +216,10 @@ void List<DataType>::replace(const DataType& newDataItem) throw (logic_error)
 	return;
 }
 
+/**
+ * @brief Deletes all nodes in the list
+ * @post Head and cursor set to NULL
+*/
 template <typename DataType>
 void List<DataType>::clear()
 {
@@ -193,6 +241,10 @@ void List<DataType>::clear()
 	return;
 }
 
+/**
+ * @brief Checks for an empty list
+ * @return True if empty, false if not.
+*/
 template <typename DataType>
 bool List<DataType>::isEmpty() const
 {
@@ -203,12 +255,19 @@ bool List<DataType>::isEmpty() const
 	return false;
 }
 
+/**
+ * @brief Checks for full list
+ * @return Always returns false
+*/
 template <typename DataType>
 bool List<DataType>::isFull() const
 {
 	return false;
 }
 
+/**
+ * @brief Moves cursor to beginning
+*/
 template <typename DataType>
 void List<DataType>::gotoBeginning() throw(logic_error)
 {
@@ -219,6 +278,9 @@ void List<DataType>::gotoBeginning() throw(logic_error)
 	return;
 }
 
+/**
+ * @brief Moves cursor to end
+*/
 template <typename DataType>
 void List<DataType>::gotoEnd() throw (logic_error)
 {
@@ -232,6 +294,10 @@ void List<DataType>::gotoEnd() throw (logic_error)
 	return;
 }
 
+/**
+ * @brief Moves cursor to next node
+ * @return True if successful move, false if cursor is already at the tail
+*/
 template <typename DataType>
 bool List<DataType>::gotoNext() throw(logic_error)
 {
@@ -250,6 +316,10 @@ bool List<DataType>::gotoNext() throw(logic_error)
 	}
 }
 
+/**
+ * @brief Moves cursor to previous node
+ * @return True if successful move, false if cursor is already at the head
+*/
 template <typename DataType>
 bool List<DataType>::gotoPrior() throw (logic_error)
 {
@@ -273,6 +343,10 @@ bool List<DataType>::gotoPrior() throw (logic_error)
 	}
 }
 
+/**
+ * @brief Returns data item at cursor
+ * @return Data item at cursor
+*/
 template <typename DataType>
 DataType List<DataType>::getCursor() const throw (logic_error)
 {
@@ -282,6 +356,9 @@ DataType List<DataType>::getCursor() const throw (logic_error)
 	}
 }
 
+/**
+ * @brief Moves current node to beginning of list
+*/
 template <typename DataType>
 void List<DataType>::moveToBeginning () throw (logic_error)
 {
@@ -300,6 +377,11 @@ void List<DataType>::moveToBeginning () throw (logic_error)
 	}
 }
 
+/**
+ * @brief Inserts a new node before the cursor
+ * @param newDataItem Data item to insert
+ * @post Cursor at the new node
+*/
 template <typename DataType>
 void List<DataType>::insertBefore(const DataType& newDataItem) throw (logic_error)
 {
@@ -315,6 +397,12 @@ void List<DataType>::insertBefore(const DataType& newDataItem) throw (logic_erro
 		cursor->next = newNode;
 	}
 }
+
+/**
+ * @brief Prints the list using iostream
+ * @detail If the list is empty, the string "Empty list" is output. Otherwise the list is output
+ * starting at the head, with the cursor surrounded by '[]'.
+*/
 template <typename DataType>
 void List<DataType>::showStructure() const
 {
@@ -341,6 +429,12 @@ void List<DataType>::showStructure() const
 	}
 	return;
 }
+
+/**
+ * @brief Constructor for nodes
+ * @param nodeData Data item contained by the node.
+ * @param nextPtr The next node in the list to be pointed to. 
+*/
 template <typename DataType>
 List<DataType>::ListNode::ListNode(const DataType& nodeData, ListNode* nextPtr)
 {
