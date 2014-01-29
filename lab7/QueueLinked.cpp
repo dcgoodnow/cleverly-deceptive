@@ -15,13 +15,52 @@ QueueLinked<DataType>::QueueLinked(int maxNumber)
 template <typename DataType>
 QueueLinked<DataType>::QueueLinked(const QueueLinked<DataType>& other)
 {
-	//stub fn
+	if(other.isEmpty() )
+	{
+		front = NULL;
+		back = NULL;
+	}
+	else
+	{
+		QueueNode* srcNode = other.front;
+		front = new QueueNode(srcNode->dataItem, NULL);
+		back = front;
+		srcNode = srcNode->next;
+		while(srcNode != NULL)
+		{
+			back->next = new QueueNode(srcNode->dataItem, NULL);
+			back = back->next;
+			srcNode = srcNode->next;
+		}
+		srcNode = NULL;
+	}
 }
 
 template <typename DataType>
 QueueLinked<DataType>& QueueLinked<DataType>::operator=(const QueueLinked<DataType>& other)
 {
-	//stub fn
+	if( this != &other )
+	{
+		if( !isEmpty() )
+		{
+			clear();
+		}
+		if( !other.isEmpty() )
+		{
+			QueueNode* srcNode = other.front;
+			front = new QueueNode(srcNode->dataItem, NULL);
+			back = front;
+			srcNode = srcNode->next;
+			while(srcNode != NULL)
+			{
+				back->next = new QueueNode(srcNode->dataItem, NULL);
+				back = back->next;
+				srcNode = srcNode->next;
+			}
+			srcNode = NULL;
+		}
+	}
+	return this;
 }
 
 template <typename DataType>
