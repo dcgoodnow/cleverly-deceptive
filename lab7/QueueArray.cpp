@@ -1,5 +1,38 @@
+/**@file QueueArray.cpp
+ *
+ * @author Daniel Goodnow
+ * 
+ * @version 0.1
+ *
+ * @date Tuesday, January 28, 2014
+ *
+ * @mainpage Linked and Array-based Queue Implementation
+ *
+ * @detail This is a queue data structure. (Technically it is a deque because
+ * of its extra functionality, but it will be referred to as a queue for the
+ * sake of simplicity). Both array and singly-linked versions are provided. It
+ * contains all the functions necessary to perform standard queue operations
+ * which are described in the class documentation. The array-based
+ * implementation  uses a wrap style of queue, which means that both the front
+ * and rear of the queue can move inside the array. This maximizes the
+ * processing and memory efficiency of the data structure by reducing the
+ * processor cycles that would be used to shuffle data items up and down the
+ * array and by ensuring that the entire array can always be used. Also,
+ * functions to put an item in the front and retrieve an item from the rear
+ * were implemented which allows the queue to function like a deque. The ADT is
+ * templated and therefore can be used with any data type. 
+*/
 #include "QueueArray.h"
 
+/**
+ * @brief Constructor
+ * 
+ * @param maxNumber Sets the maximum size for the array. Defaults to the max
+ * size specified in Queue.h. 
+ *
+ * @pre Queue non-existent
+ * @post Queue initialized
+*/
 template <typename DataType>
 QueueArray<DataType>::QueueArray(int maxNumber)
 {
@@ -9,6 +42,14 @@ QueueArray<DataType>::QueueArray(int maxNumber)
 	dataItems = new DataType[maxSize];
 }
 
+/**
+ * @brief Copy constructor
+ * 
+ * @param other Queue to be copied from
+ *
+ * @pre Queue non-existent
+ * @post Queue initialized
+*/
 template <typename DataType>
 QueueArray<DataType>::QueueArray(const QueueArray<DataType>& other)
 {
@@ -40,6 +81,13 @@ QueueArray<DataType>::QueueArray(const QueueArray<DataType>& other)
 	}
 }
 
+/**
+ * @brief Assignment operator
+ * 
+ * @param other Queue to be copied from
+ *
+ * @post Queue is the same as other
+*/
 template <typename DataType>
 QueueArray<DataType>& QueueArray<DataType>::operator=(const QueueArray<DataType>& other)
 {
@@ -79,6 +127,12 @@ QueueArray<DataType>& QueueArray<DataType>::operator=(const QueueArray<DataType>
 	}
 }
 
+/**
+ *	@brief Destructor
+ *
+ *	@post All memory allocated by the queue is deallocated and front/rear are set
+ *	to -1
+*/
 template <typename DataType>
 QueueArray<DataType>::~QueueArray()
 {
@@ -87,6 +141,13 @@ QueueArray<DataType>::~QueueArray()
 	delete[] dataItems;
 }
 
+/**
+ * @brief Appends a new data item to the end of the queue. 
+ *
+ * @param newDataItem Data item to be enqueued.
+ *
+ * @post The new item is appended to the end and \a back points to this item.
+*/
 template <typename DataType>
 void QueueArray<DataType>::enqueue( const DataType& newDataItem) throw (logic_error)
 {
@@ -113,7 +174,14 @@ void QueueArray<DataType>::enqueue( const DataType& newDataItem) throw (logic_er
 	}
 }
 
-
+/**
+ * @brief Removes a data item from the front of the queue.
+ *
+ * @return The item which was removed
+ *
+ * @post Front is moved to the next item. If it was the last item, the list is
+ * set to empty.
+*/
 template <typename DataType>
 DataType QueueArray<DataType>::dequeue() throw (logic_error)
 {
@@ -144,6 +212,11 @@ DataType QueueArray<DataType>::dequeue() throw (logic_error)
 }
 
 
+/**
+ *	@brief Sets the list to empty
+ *
+ *	@post Front and rear are set to -1.
+*/
 template <typename DataType>
 void QueueArray<DataType>::clear()
 {
@@ -154,7 +227,11 @@ void QueueArray<DataType>::clear()
 	}
 }
 
-
+/**
+ * @brief Determines whether the queue is empty.
+ *
+ * @return Returns true if empty, false if not empty.
+*/
 template <typename DataType>
 bool QueueArray<DataType>::isEmpty() const
 {
@@ -168,7 +245,11 @@ bool QueueArray<DataType>::isEmpty() const
 	}
 }
 
-
+/**
+ * @brief Determines whether the queue is full.
+ *
+ * @return Returns true if full, false if not full.
+*/
 template <typename DataType>
 bool QueueArray<DataType>::isFull() const
 {
@@ -196,7 +277,13 @@ bool QueueArray<DataType>::isFull() const
 	}
 }
 
-
+/**
+ * @brief Appends a data item at the front of the queue. 
+ *
+ * @param newDataItem Data item to be added.
+ *
+ * @post Front is moved to the new data item.
+*/
 template <typename DataType>
 void QueueArray<DataType>::putFront(const DataType& newDataItem) throw (logic_error)
 {
@@ -225,7 +312,13 @@ void QueueArray<DataType>::putFront(const DataType& newDataItem) throw (logic_er
 		}
 	}
 }
-
+/**
+ * @brief Removes a data item from the rear of the queue.
+ *
+ * @return Data item removed.
+ *
+ * @post Back is moved to the previous data item. 
+*/
 template <typename DataType>
 DataType QueueArray<DataType>::getRear() throw (logic_error)
 {
@@ -252,7 +345,11 @@ DataType QueueArray<DataType>::getRear() throw (logic_error)
 	}
 }
 
-
+/**
+ * @brief Computes the actual length of the queue.
+ *
+ * @return The length of the queue.
+ */
 template <typename DataType>
 int QueueArray<DataType>::getLength() const
 {
@@ -273,12 +370,11 @@ int QueueArray<DataType>::getLength() const
 	}
 }
 
+/**
+ *	@brief Prints the structure to the standard output. 
+ */
 template <typename DataType>
 void QueueArray<DataType>::showStructure() const 
-// Array implementation. Outputs the data items in a queue. If the
-// queue is empty, outputs "Empty queue". This operation is intended
-// for testing and debugging purposes only.
-
 {
     int j;   // Loop counter
 

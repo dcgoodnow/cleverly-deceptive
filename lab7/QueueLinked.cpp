@@ -4,6 +4,14 @@ using namespace std;
 
 
 
+/**
+ * @brief Constructor
+ * 
+ * @param maxNumber Ignored for linked queue implementation.
+ *
+ * @pre Queue non-existent
+ * @post Queue initialized
+*/
 template <typename DataType>
 QueueLinked<DataType>::QueueLinked(int maxNumber)
 {
@@ -12,6 +20,14 @@ QueueLinked<DataType>::QueueLinked(int maxNumber)
 }
 
 
+/**
+ * @brief Copy constructor
+ * 
+ * @param other Queue to be copied from
+ *
+ * @pre Queue non-existent
+ * @post Queue initialized
+*/
 template <typename DataType>
 QueueLinked<DataType>::QueueLinked(const QueueLinked<DataType>& other)
 {
@@ -36,6 +52,13 @@ QueueLinked<DataType>::QueueLinked(const QueueLinked<DataType>& other)
 	}
 }
 
+/**
+ * @brief Assignment operator
+ * 
+ * @param other Queue to be copied from
+ *
+ * @post Queue is the same as other
+*/
 template <typename DataType>
 QueueLinked<DataType>& QueueLinked<DataType>::operator=(const QueueLinked<DataType>& other)
 {
@@ -63,6 +86,12 @@ QueueLinked<DataType>& QueueLinked<DataType>::operator=(const QueueLinked<DataTy
 	return this;
 }
 
+/**
+ *	@brief Destructor
+ *
+ *	@post All memory allocated by the queue is deallocated and front/rear are set
+ *	to NULL
+*/
 template <typename DataType>
 QueueLinked<DataType>::~QueueLinked()
 {
@@ -79,6 +108,13 @@ QueueLinked<DataType>::~QueueLinked()
 	}
 }
 
+/**
+ * @brief Appends a new data item to the end of the queue. 
+ *
+ * @param newDataItem Data item to be enqueued.
+ *
+ * @post The new item is appended to the end and \a back points to this item.
+*/
 template <typename DataType>
 void QueueLinked<DataType>::enqueue(const DataType& newDataItem) throw (logic_error)
 {
@@ -97,6 +133,14 @@ void QueueLinked<DataType>::enqueue(const DataType& newDataItem) throw (logic_er
 	}
 }
 
+/**
+ * @brief Removes a data item from the front of the queue.
+ *
+ * @return The item which was removed
+ *
+ * @post Front is moved to the next node and the first node is deleted. If it 
+ * was the last item, the list is set to empty.
+*/
 template <typename DataType>
 DataType QueueLinked<DataType>::dequeue() throw (logic_error)
 {
@@ -119,6 +163,12 @@ DataType QueueLinked<DataType>::dequeue() throw (logic_error)
 	}
 }
 
+/**
+ *	@brief Deletes all nodes in the queue
+ *
+ *	@post All memory allocated by the queue is deallocated and front/rear are set
+ *	to NULL
+*/
 template <typename DataType>
 void QueueLinked<DataType>::clear()
 {
@@ -135,6 +185,11 @@ void QueueLinked<DataType>::clear()
 	}
 }
 
+/**
+ * @brief Determines whether the queue is empty.
+ *
+ * @return Returns true if empty, false if not empty.
+*/
 template <typename DataType>
 bool QueueLinked<DataType>::isEmpty() const
 {
@@ -145,6 +200,11 @@ bool QueueLinked<DataType>::isEmpty() const
 	else return false;
 }
 
+/**
+ * @brief Determines whether the queue is full.
+ *
+ * @return Returns true if full, false if not full.
+*/
 template <typename DataType>
 bool QueueLinked<DataType>::isFull() const
 {
@@ -152,6 +212,13 @@ bool QueueLinked<DataType>::isFull() const
 	return false;
 }
 
+/**
+ * @brief Appends a data item at the front of the queue. 
+ *
+ * @param newDataItem Data item to be added.
+ *
+ * @post Front is moved to the new data item.
+*/
 template <typename DataType>
 void QueueLinked<DataType>::putFront( const DataType& newDataItem) throw (logic_error)
 {
@@ -162,6 +229,13 @@ void QueueLinked<DataType>::putFront( const DataType& newDataItem) throw (logic_
 	}
 }
 
+/**
+ * @brief Removes a data item from the rear of the queue.
+ *
+ * @return Data item removed.
+ *
+ * @post Back is moved to the previous node and the node removed is deleted.
+*/
 template <typename DataType>
 DataType QueueLinked<DataType>::getRear() throw (logic_error)
 {
@@ -189,6 +263,12 @@ DataType QueueLinked<DataType>::getRear() throw (logic_error)
 		return toGet;
 	}
 }
+
+/**
+ * @brief Computes the actual length of the queue.
+ *
+ * @return The length of the queue.
+ */
 template <typename DataType>
 int QueueLinked<DataType>::getLength() const
 {
@@ -209,12 +289,12 @@ int QueueLinked<DataType>::getLength() const
 	}
 }
 
+/**
+ *	@brief Prints the structure to the standard output. 
+ */
 template <typename DataType>
 void QueueLinked<DataType>:: showStructure () const
 
-// Linked list implementation. Outputs the elements in a queue. If
-// the queue is empty, outputs "Empty queue". This operation is
-// intended for testing and debugging purposes only.
 
 {
     QueueNode *p;   // Iterates through the queue
@@ -239,7 +319,15 @@ void QueueLinked<DataType>:: showStructure () const
     }
 }
 
-
+/**
+ * @brief Constructor
+ *
+ * @param nodeData Data item to be stored in the node.
+ *
+ * @param nextPtr Pointer which points to the next node in the queue.
+ *
+ * @post Node is initialized with given values.
+ */
 template <typename DataType>
 QueueLinked<DataType>::QueueNode::QueueNode(
 		const DataType& nodeData, QueueNode* nextPtr)
