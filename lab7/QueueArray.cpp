@@ -12,13 +12,71 @@ QueueArray<DataType>::QueueArray(int maxNumber)
 template <typename DataType>
 QueueArray<DataType>::QueueArray(const QueueArray<DataType>& other)
 {
-	//stub fn
+	maxSize = other.maxSize;
+	front = other.front;
+	back = other.back;
+	dataItems = new DataType[maxSize];
+
+	if( !other.isEmpty() )
+	{
+		if(back >= front)
+		{
+			for(int i = front; i <= back; i++)
+			{
+				dataItems[i] = other.dataItems[i];
+			}
+		}
+		else
+		{
+			for(int i = back; i < maxSize; i++)
+			{
+				dataItems[i] = other.dataItems[i];
+			}
+			for(int i = 0; i <=front; i++)
+			{
+				dataItems[i] = other.dataItems[i];
+			}
+		}
+	}
 }
 
 template <typename DataType>
 QueueArray<DataType>& QueueArray<DataType>::operator=(const QueueArray<DataType>& other)
 {
-	//stub
+	if( this == &other )
+	{
+		return this;
+	}
+	else
+	{
+		delete[] dataItems;
+		front = other.front;
+		back = other.back;
+		maxSize = other.maxSize;
+		dataItems = new DataType[maxSize];
+		if( !other.isEmpty() )
+		{
+			if(back >= front)
+			{
+				for(int i = front; i <= back; i++)
+				{
+					dataItems[i] = other.dataItems[i];
+				}
+			}
+			else
+			{
+				for(int i = back; i < maxSize; i++)
+				{
+					dataItems[i] = other.dataItems[i];
+				}
+				for(int i = 0; i <=front; i++)
+				{
+					dataItems[i] = other.dataItems[i];
+				}
+			}
+		}
+		return this;
+	}
 }
 
 template <typename DataType>
