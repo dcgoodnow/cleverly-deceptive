@@ -290,10 +290,11 @@ int QueueLinked<DataType>::getLength() const
 }
 
 /**
- *	@brief Prints the structure to the standard output. 
+ *	@brief Prints the structure to the standard output.
+ *	@post queue is printed to screen
  */
 template <typename DataType>
-void QueueLinked<DataType>:: showStructure () const
+void QueueLinked<DataType>::showStructure () const
 
 
 {
@@ -325,7 +326,7 @@ void QueueLinked<DataType>:: showStructure () const
  * @param nodeData Data item to be stored in the node.
  *
  * @param nextPtr Pointer which points to the next node in the queue.
- *
+ * @pre Node is non-existent
  * @post Node is initialized with given values.
  */
 template <typename DataType>
