@@ -281,6 +281,9 @@ void QueueLinked<DataType>::putFront( const DataType& newDataItem) throw (logic_
 /**
  * @brief Removes a data item from the rear of the queue.
  *
+ *	@algorithm Removes a node from the end of the queue and returns its data 
+ *	item. If it is the last node it sets the queue to empty.
+ *
  * @return Data item removed.
  *
  * @post Back is moved to the previous node and the node removed is deleted.
@@ -320,6 +323,9 @@ DataType QueueLinked<DataType>::getRear() throw (logic_error)
 /**
  * @brief Computes the actual length of the queue.
  *
+ * @algorithm Iterate through queue beginning at the front counting nodes until
+ * the rear
+ *
  * @return The length of the queue.
  */
 template <typename DataType>
@@ -344,6 +350,10 @@ int QueueLinked<DataType>::getLength() const
 
 /**
  *	@brief Prints the structure to the standard output.
+ *
+ * @algorithm Iterates through queue front the beginning, printing out each item.
+ * When it outputs the fron it places brackets around it.
+ *
  *	@post queue is printed to screen
  */
 template <typename DataType>
@@ -351,7 +361,7 @@ void QueueLinked<DataType>::showStructure () const
 
 
 {
-    QueueNode *p;   // Iterates through the queue
+    QueueNode *p;
 
     if ( isEmpty() )
 	cout << "Empty queue" << endl;
@@ -360,17 +370,17 @@ void QueueLinked<DataType>::showStructure () const
 	cout << "Front\t";
 	for ( p = front ; p != 0 ; p = p->next )
 	{
-	    if( p == front ) 
-	    {
-		cout << '[' << p->dataItem << "] ";
-	    }
-	    else
-	    {
-		cout << p->dataItem << " ";
-	    }
+		if( p == front ) 
+		{
+			cout << '[' << p->dataItem << "] ";
+		}
+		else
+		{
+			cout << p->dataItem << " ";
+		}
 	}
 	cout << "\trear" << endl;
-    }
+	 }
 }
 
 /**

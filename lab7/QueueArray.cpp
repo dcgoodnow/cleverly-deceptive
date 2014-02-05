@@ -30,6 +30,8 @@
  * @param maxNumber Sets the maximum size for the array. Defaults to the max
  * size specified in Queue.h. 
  *
+ * @algorithm All data members are initialized and the array is allocated.
+ *
  * @pre Queue non-existent
  * @post Queue initialized
 */
@@ -46,6 +48,9 @@ QueueArray<DataType>::QueueArray(int maxNumber)
  * @brief Copy constructor
  * 
  * @param other Queue to be copied from
+ *
+ *	@algorithm Allocates a memory for new array and copies all data members 
+ *	from the existing queue.
  *
  * @pre Queue non-existent
  * @post Queue initialized
@@ -85,6 +90,9 @@ QueueArray<DataType>::QueueArray(const QueueArray<DataType>& other)
  * @brief Assignment operator
  * 
  * @param other Queue to be copied from
+ *
+ * @algorithm Deletes existing queue and copies all members from existing queue 
+ * into newly allocated array. 
  *
  * @post Queue is the same as other
 */
@@ -130,6 +138,9 @@ QueueArray<DataType>& QueueArray<DataType>::operator=(const QueueArray<DataType>
 /**
  *	@brief Destructor
  *
+ *	@algorithm resets data members to initial values and deallocates memory for 
+ *	array.
+ *
  *	@post All memory allocated by the queue is deallocated and front/rear are set
  *	to -1
 */
@@ -145,6 +156,9 @@ QueueArray<DataType>::~QueueArray()
  * @brief Appends a new data item to the end of the queue. 
  *
  * @param newDataItem Data item to be enqueued.
+ *
+ * @algorithm The back  index is incremented and a data item is added at this
+ * location. If it is the first item, the front is set to 0.
  *
  * @post The new item is appended to the end and \a back points to this item.
 */
@@ -180,6 +194,9 @@ void QueueArray<DataType>::enqueue( const DataType& newDataItem) throw (logic_er
 
 /**
  * @brief Removes a data item from the front of the queue.
+ *
+ * @algorithm Returns the item at the back and moves back to the previous data
+ * item.
  *
  * @return The item which was removed
  *
@@ -223,6 +240,8 @@ DataType QueueArray<DataType>::dequeue() throw (logic_error)
 /**
  *	@brief Sets the list to empty
  *
+ *	@algorithm Sets the front and rear to -1.
+ *
  *	@post Front and rear are set to -1.
 */
 template <typename DataType>
@@ -237,6 +256,8 @@ void QueueArray<DataType>::clear()
 
 /**
  * @brief Determines whether the queue is empty.
+ * 
+ * @algorithm Checks for front equal to -1.
  *
  * @return Returns true if empty, false if not empty.
 */
@@ -255,6 +276,9 @@ bool QueueArray<DataType>::isEmpty() const
 
 /**
  * @brief Determines whether the queue is full.
+ *
+ * @algorithm Checks to see if front and back are adjacent with back directly
+ * previous to first.
  *
  * @return Returns true if full, false if not full.
 */
@@ -290,6 +314,9 @@ bool QueueArray<DataType>::isFull() const
  *
  * @param newDataItem Data item to be added.
  *
+ * @algorithm Adds a data item to the front of the queue.
+ *
+ * @pre Queue is not full.
  * @post Front is moved to the new data item.
 */
 template <typename DataType>
@@ -326,6 +353,9 @@ void QueueArray<DataType>::putFront(const DataType& newDataItem) throw (logic_er
 }
 /**
  * @brief Removes a data item from the rear of the queue.
+ *
+ * @algorithm Retrieves the data item at the rear and shifts back to the previous
+ * index.
  *
  * @return Data item removed.
  *
@@ -364,6 +394,9 @@ DataType QueueArray<DataType>::getRear() throw (logic_error)
 /**
  * @brief Computes the actual length of the queue.
  *
+ * @algorithm Depending on the relation between back and front the difference
+ * between the two are returned.
+ *
  * @return The length of the queue.
  */
 template <typename DataType>
@@ -388,6 +421,11 @@ int QueueArray<DataType>::getLength() const
 
 /**
  *	@brief Prints the structure to the standard output. 
+ *
+ *	@algorithm Iterates through the array and prints out the valid values.
+ *
+ *	@post List is printed to screen.
+ *
  */
 template <typename DataType>
 void QueueArray<DataType>::showStructure() const 
