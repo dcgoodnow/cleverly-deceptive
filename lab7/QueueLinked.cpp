@@ -5,6 +5,7 @@ using namespace std;
 //test
 
 /**
+ * @name Constructor
  * @brief Constructor
  * 
  * @param maxNumber Ignored for linked queue implementation.
@@ -21,9 +22,13 @@ QueueLinked<DataType>::QueueLinked(int maxNumber)
 
 
 /**
+ * @name Copy Constructor
  * @brief Copy constructor
  * 
  * @param other Queue to be copied from
+ *
+ * @algorithm Loop through the existing list, creating new copies of each node
+ * and linking them in the new Queue
  *
  * @pre Queue non-existent
  * @post Queue initialized
@@ -53,10 +58,15 @@ QueueLinked<DataType>::QueueLinked(const QueueLinked<DataType>& other)
 }
 
 /**
+ * @name Assignment Operator
  * @brief Assignment operator
  * 
  * @param other Queue to be copied from
  *
+ * @algorithm Loop through the existing list, creating new copies of each node
+ * and linking them in the new Queue
+ *
+ * @pre nothing will happen if the other list is the same
  * @post Queue is the same as other
 */
 template <typename DataType>
@@ -87,8 +97,12 @@ QueueLinked<DataType>& QueueLinked<DataType>::operator=(const QueueLinked<DataTy
 }
 
 /**
+ * @name	~QueueLinked
  *	@brief Destructor
  *
+ * @algorithm Starting at the beginning of the queue, each node is deleted
+ *
+ * @pre The queue exists
  *	@post All memory allocated by the queue is deallocated and front/rear are set
  *	to NULL
 */
@@ -109,9 +123,13 @@ QueueLinked<DataType>::~QueueLinked()
 }
 
 /**
+ * @name enqueue
  * @brief Appends a new data item to the end of the queue. 
  *
  * @param newDataItem Data item to be enqueued.
+ *
+ * @algorithm If the queue is empty the first node is created, otherwise a node
+ * is added to the end of the queue
  *
  * @post The new item is appended to the end and \a back points to this item.
 */
@@ -134,12 +152,17 @@ void QueueLinked<DataType>::enqueue(const DataType& newDataItem) throw (logic_er
 }
 
 /**
+ * @name dequeue
  * @brief Removes a data item from the front of the queue.
  *
  * @return The item which was removed
  *
+ * @algorithm The last node is removed from the queue and the data returned. If
+ * it is the last item in the queue, set the queue to empty
+ *	
+ *	@pre the list is not empty
  * @post Front is moved to the next node and the first node is deleted. If it 
- * was the last item, the list is set to empty.
+ * was the last item, the queue is set to empty.
 */
 template <typename DataType>
 DataType QueueLinked<DataType>::dequeue() throw (logic_error)
@@ -164,8 +187,13 @@ DataType QueueLinked<DataType>::dequeue() throw (logic_error)
 }
 
 /**
+ * @name clear
  *	@brief Deletes all nodes in the queue
  *
+ *	@algorithm The queue is looped through from the beginning to delete all the
+ *	nodes.
+ *
+ * @pre the list is not empty
  *	@post All memory allocated by the queue is deallocated and front/rear are set
  *	to NULL
 */
@@ -186,7 +214,10 @@ void QueueLinked<DataType>::clear()
 }
 
 /**
+ * @name isEmpty
  * @brief Determines whether the queue is empty.
+ *
+ * @algorithm The queue is empty if the front is null.
  *
  * @return Returns true if empty, false if not empty.
 */
@@ -201,7 +232,10 @@ bool QueueLinked<DataType>::isEmpty() const
 }
 
 /**
+ * @name isFull
  * @brief Determines whether the queue is full.
+ *
+ * @algorithm The linked queue cannot be full.
  *
  * @return Returns true if full, false if not full.
 */
@@ -213,9 +247,12 @@ bool QueueLinked<DataType>::isFull() const
 }
 
 /**
+ * @name putFront
  * @brief Appends a data item at the front of the queue. 
  *
  * @param newDataItem Data item to be added.
+ *
+ * @algorithm inserts a node at the front of the queue.
  *
  * @post Front is moved to the new data item.
 */
