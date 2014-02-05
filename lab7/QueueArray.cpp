@@ -172,6 +172,10 @@ void QueueArray<DataType>::enqueue( const DataType& newDataItem) throw (logic_er
 			dataItems[back] = newDataItem;
 		}
 	}
+	else 
+	{
+		throw logic_error("Queue is full.");
+	}
 }
 
 /**
@@ -208,6 +212,10 @@ DataType QueueArray<DataType>::dequeue() throw (logic_error)
 			}
 		}
 		return toDeq;
+	}
+	else
+	{
+		throw logic_error("Queue is empty.");
 	}
 }
 
@@ -311,6 +319,10 @@ void QueueArray<DataType>::putFront(const DataType& newDataItem) throw (logic_er
 			}
 		}
 	}
+	else
+	{
+		throw logic_error("Queue is full.");
+	}
 }
 /**
  * @brief Removes a data item from the rear of the queue.
@@ -342,6 +354,10 @@ DataType QueueArray<DataType>::getRear() throw (logic_error)
 			}
 		}
 		return toGet;
+	}
+	else
+	{
+		throw logic_error("Queue is empty.");
 	}
 }
 

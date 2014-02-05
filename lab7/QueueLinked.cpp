@@ -149,6 +149,10 @@ void QueueLinked<DataType>::enqueue(const DataType& newDataItem) throw (logic_er
 			back = back->next;
 		}
 	}
+	else
+	{
+		throw logic_error("Queue is full.");
+	}
 }
 
 /**
@@ -183,6 +187,10 @@ DataType QueueLinked<DataType>::dequeue() throw (logic_error)
 			nodeTmp = NULL;
 		}
 		return toDeq;
+	}
+	else
+	{
+		throw logic_error("Queue is empty.");
 	}
 }
 
@@ -264,6 +272,10 @@ void QueueLinked<DataType>::putFront( const DataType& newDataItem) throw (logic_
 		QueueNode* toPut = new QueueNode(newDataItem, front);
 		front = toPut;
 	}
+	else
+	{
+		throw logic_error("Queue is full.");
+	}
 }
 
 /**
@@ -298,6 +310,10 @@ DataType QueueLinked<DataType>::getRear() throw (logic_error)
 			back->next = NULL;
 		}
 		return toGet;
+	}
+	else
+	{
+		throw logic_error("Queue is empty.");
 	}
 }
 
