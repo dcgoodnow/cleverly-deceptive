@@ -29,7 +29,7 @@ int main(int argc, char ** argv)
        }
     timer.stop();
 
-    printf("Slept for %.2lf seconds. Measured %.2lf seconds.\n", d1, timer.getElapsedTime());
+    printf("Slept for %.6lf seconds. Measured %.6lf seconds.\n", d1, timer.getElapsedTime());
 
     return 0;
 }
