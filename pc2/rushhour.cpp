@@ -51,14 +51,13 @@ int main()
 	{
 		cin >> grid[i].length;
 		cin >> grid[i].orientation;
-		cin >> grid[i].xPos;
-		grid[i].xPos++;
 		cin >> grid[i].yPos;
 		grid[i].yPos++;
+		cin >> grid[i].xPos;
+		grid[i].xPos++;
 		board[grid[i].xPos][grid[i].yPos] = 'x';
 		if(grid[i].orientation == 'H')
 		{
-			cout << "Horizontal" << endl;
 			if(grid[i].length == 2)
 			{
 				board[grid[i].xPos+1][grid[i].yPos] = 'x';
@@ -75,20 +74,19 @@ int main()
 			{
 				board[grid[i].xPos][grid[i].yPos+1] = 'x';
 			}
-			if(grid[i].length == 2)
+			if(grid[i].length == 3)
 			{
 				board[grid[i].xPos][grid[i].yPos+1] = 'x';
 				board[grid[i].xPos][grid[i].yPos+2] = 'x';
 			}
 		}
 	}
-	printGrid(board);
 	int best = 10;
 	int moves = 0;
 	if(solve(grid, board, size, best, moves))
 	{
-		cout << "The puzzle is solvable in " << best << " moves." << endl;
 	}
+		cout << "The puzzle is solvable in " << best << " moves." << endl;
 }
 
 bool moveForward(car* cars, int carNumber, char** board)
@@ -103,8 +101,6 @@ bool moveForward(car* cars, int carNumber, char** board)
 							[cars[carNumber].yPos]	= 'x';
 				board[cars[carNumber].xPos][cars[carNumber].yPos] = ' ';
 				cars[carNumber].xPos++;
-				cout << "forward" << endl;
-				printGrid(board);
 				return true;
 			}
 			else
@@ -114,8 +110,8 @@ bool moveForward(car* cars, int carNumber, char** board)
 			break;
 
 		case 'V':
-			if(board[cars[carNumber].xPos + cars[carNumber].length -1]
-					  [cars[carNumber].yPos] != 'x')
+			if(board[cars[carNumber].xPos]
+					  [cars[carNumber].yPos + cars[carNumber].length ] != 'x')
 			{
 				board[cars[carNumber].xPos]
 							 [cars[carNumber].yPos + cars[carNumber].length]	= 'x';
@@ -128,6 +124,8 @@ bool moveForward(car* cars, int carNumber, char** board)
 				return false;
 			}
 			break;
+		default:
+			return false;
 	}
 }
 
@@ -164,16 +162,16 @@ bool moveBackward(car* cars, int carNumber, char** board)
 				return false;
 			}
 			break;
+		default:
+			return false;
 	}
 }
 
 bool solve(car* cars, char* board[8], int numCars, int& best, int& moves)
 {
-	cout << cars[0].xPos << endl;
 	if(cars[0].xPos == 5)
 	{
 		best = moves;
-		moves = 0;
 		return true;
 	}
 	else if(moves >= best)
