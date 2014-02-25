@@ -15,23 +15,34 @@ struct car{
 	char orientation;
 };
 
-bool moveForward(car*, int);
+bool moveForward(car*, int, char**);
 
-bool moveBackward(car*, int);
+bool moveBackward(car*, int, char**);
 
-bool solve(car*, int, int&, int&);
+bool solve(car*, char*[8], int, int&, int&);
 	
 int main()
 {
 	int size;
 	cin >> size;
 	car* grid = new car[size];
-	char board[6][6]; 
-	for(int i = 0; i < 6; i++)
+	char** board = new char*[8];
+	for(int i = 0; i < 8; i++)
 	{
-		for(int j = 0; j<6; j++)
+		board[i] = new char[8];
+	}
+	for(int i = 0; i < 8; i++)
+	{
+		for(int j = 0; j<8; j++)
 		{
-			board[i][j] = ' ';
+			if(i == 0 || i==7 || j==0 || j==8)
+			{
+				board[i][j] = 'x';
+			}
+			else
+			{
+				board[i][j] = ' ';
+			}
 		}
 	}
 	for( int i = 0; i < size; i++)
@@ -39,7 +50,9 @@ int main()
 		cin >> grid[i].length;
 		cin >> grid[i].orientation;
 		cin >> grid[i].xPos;
+		grid[i].xPos++;
 		cin >> grid[i].yPos;
+		grid[i].yPos++;
 		board[grid[i].xPos][grid[i].yPos] = 'x';
 		if(grid[i].orientation == 'H')
 		{
@@ -68,19 +81,23 @@ int main()
 	}
 	int best = 10;
 	int moves = 0;
-	if(solve(grid, size, best, moves))
+	if(solve(grid, board, size, best, moves))
 	{
 		cout << "The puzzle is solvable in " << best << " moves." << endl;
 	}
 }
 
-bool moveForward(car* cars, int carNumber, char[6][6] board)
+bool moveForward(car* cars, int carNumber, char** board)
 {
 	switch(cars[carNumber].orientation)
 	{
 		case 'H':
-			if(cars[carNumber].xPos + cars[carNumber].length != 7 )
+			if(board[cars[carNumber].xPos + cars[carNumber].length -1]
+					  [cars[carNumber].yPos] != 'x')
 			{
+				board[cars[carNumber].xPos + cars[carNumber].length]
+							[cars[carNumber].yPos]	= 'x';
+				board[cars[carNumber].xPos][cars[carNumber].yPos] = ' ';
 				cars[carNumber].xPos++;
 				return true;
 			}
@@ -91,8 +108,12 @@ bool moveForward(car* cars, int carNumber, char[6][6] board)
 			break;
 
 		case 'V':
-			if(cars[carNumber].yPos + cars[carNumber].length != 7)
+			if(board[cars[carNumber].xPos + cars[carNumber].length -1]
+					  [cars[carNumber].yPos] != 'x')
 			{
+				board[cars[carNumber].xPos]
+							 [cars[carNumber].yPos + cars[carNumber].length]	= 'x';
+				board[cars[carNumber].xPos][cars[carNumber].yPos] = ' ';
 				cars[carNumber].yPos++;
 				return true;
 			}
@@ -104,14 +125,17 @@ bool moveForward(car* cars, int carNumber, char[6][6] board)
 	}
 }
 
-bool moveBackward(car* cars, int carNumber)
+bool moveBackward(car* cars, int carNumber, char** board)
 {
 	switch(cars[carNumber].orientation)
 	{
 		case 'H':
-			if(cars[carNumber].xPos != 0)
+			if(board[cars[carNumber].xPos-1][cars[carNumber].yPos] != 'x')
 			{
+				board[cars[carNumber].xPos-1][cars[carNumber].yPos] = 'x';
 				cars[carNumber].xPos--;
+				board[cars[carNumber].xPos+cars[carNumber].length]
+					  [cars[carNumber].yPos] = ' ';
 				return true;
 			}
 			else
@@ -121,9 +145,12 @@ bool moveBackward(car* cars, int carNumber)
 			break;
 
 		case 'V':
-			if(cars[carNumber].yPos != 0)
+			if(board[cars[carNumber].xPos][cars[carNumber].yPos - 1] != 'x')
 			{
+				board[cars[carNumber].xPos][cars[carNumber].yPos-1] = 'x';
 				cars[carNumber].yPos--;
+				board[cars[carNumber].xPos]
+					  [cars[carNumber].yPos+cars[carNumber].length] = ' ';
 				return true;
 			}
 			else
@@ -134,7 +161,7 @@ bool moveBackward(car* cars, int carNumber)
 	}
 }
 
-bool solve(car* cars, int numCars, int& best, int& moves)
+bool solve(car* cars, char* board[8], int numCars, int& best, int& moves)
 {
 	if(cars[0].xPos == 5)
 	{
@@ -147,17 +174,17 @@ bool solve(car* cars, int numCars, int& best, int& moves)
 	}
 	for(int i = 0; i<numCars; i++)
 	{
-		if(moveForward(cars, i))
+		if(moveForward(cars, i, board))
 		{
 			moves++;
-			solve( cars, numCars, best, moves);
-			moveBackward(cars, i);
+			solve( cars, board, numCars, best, moves);
+			moveBackward(cars, i, board);
 		}
-		if(moveBackward(cars, i))
+		if(moveBackward(cars, i, board))
 		{
 			moves++;
-			solve( cars, numCars, best, moves);
-			moveForward(cars, i);
+			solve( cars, board, numCars, best, moves);
+			moveForward(cars, i, board);
 		}
 	}
 }
