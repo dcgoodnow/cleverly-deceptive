@@ -20,6 +20,8 @@ bool moveForward(car*, int, char**);
 bool moveBackward(car*, int, char**);
 
 bool solve(car*, char*[8], int, int&, int&);
+
+void printGrid(char**);
 	
 int main()
 {
@@ -35,7 +37,7 @@ int main()
 	{
 		for(int j = 0; j<8; j++)
 		{
-			if(i == 0 || i==7 || j==0 || j==8)
+			if(i == 0 || i==7 || j==0 || j==7)
 			{
 				board[i][j] = 'x';
 			}
@@ -56,6 +58,7 @@ int main()
 		board[grid[i].xPos][grid[i].yPos] = 'x';
 		if(grid[i].orientation == 'H')
 		{
+			cout << "Horizontal" << endl;
 			if(grid[i].length == 2)
 			{
 				board[grid[i].xPos+1][grid[i].yPos] = 'x';
@@ -79,6 +82,7 @@ int main()
 			}
 		}
 	}
+	printGrid(board);
 	int best = 10;
 	int moves = 0;
 	if(solve(grid, board, size, best, moves))
@@ -92,13 +96,15 @@ bool moveForward(car* cars, int carNumber, char** board)
 	switch(cars[carNumber].orientation)
 	{
 		case 'H':
-			if(board[cars[carNumber].xPos + cars[carNumber].length -1]
+			if(board[cars[carNumber].xPos + cars[carNumber].length ]
 					  [cars[carNumber].yPos] != 'x')
 			{
 				board[cars[carNumber].xPos + cars[carNumber].length]
 							[cars[carNumber].yPos]	= 'x';
 				board[cars[carNumber].xPos][cars[carNumber].yPos] = ' ';
 				cars[carNumber].xPos++;
+				cout << "forward" << endl;
+				printGrid(board);
 				return true;
 			}
 			else
@@ -163,9 +169,11 @@ bool moveBackward(car* cars, int carNumber, char** board)
 
 bool solve(car* cars, char* board[8], int numCars, int& best, int& moves)
 {
+	cout << cars[0].xPos << endl;
 	if(cars[0].xPos == 5)
 	{
 		best = moves;
+		moves = 0;
 		return true;
 	}
 	else if(moves >= best)
@@ -186,5 +194,17 @@ bool solve(car* cars, char* board[8], int numCars, int& best, int& moves)
 			solve( cars, board, numCars, best, moves);
 			moveForward(cars, i, board);
 		}
+	}
+}
+
+void printGrid(char** toPrint)
+{
+	for(int i = 0; i < 8; i++)
+	{
+		for(int j = 0; j < 8; j++)
+		{
+			cout << toPrint[j][i];
+		}
+		cout << endl;
 	}
 }
