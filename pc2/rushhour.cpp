@@ -15,17 +15,86 @@ struct car{
 	char orientation;
 };
 
+/**
+ * @name Move Forward
+ * @brief Moves the specified car forward (if possible)
+ * @detail Tests to see if it is possible to move a car forward, if it is, the
+ *	car is moved and the board is updated.
+ *
+ *	@param cars Array of cars for the scenario.
+ *	@param carNumber Number of the car to move.
+ *	@param board 'Visual' representation of the playing board.
+ *
+ *	@return True if the car was able to be moved; false if not.
+ *
+ *	@pre Cars and playing board have been loaded and created.
+ *	@post Specified car is moved forward if possible.
+**/
 bool moveForward(car*, int, char**);
 
+/**
+ * @name Move Backward
+ * @brief Moves the specified car backward (if possible)
+ * @detail Tests to see if it is possible to move a car backward, if it is, the
+ *	car is moved and the board is updated.
+ *
+ *	@param cars Array of cars for the scenario.
+ *	@param carNumber Number of the car to move.
+ *	@param board 'Visual' representation of the playing board.
+ *
+ *	@return True if the car was able to be moved; false if not.
+ *
+ *	@pre Cars and playing board have been loaded and created.
+ *	@post Specified car is moved backward if possible.
+**/
 bool moveBackward(car*, int, char**);
 
-bool solve(car*, char*[8], int, int&, int&);
+/**
+ * @name Solve
+ * @brief Finds the shortest possible combination of moves to solve the scenario.
+ * @detail Uses a recursive algorithm to perform a depth first search of all
+ * possible outcomes of every move on the playing board.
+ *
+ * @algorithm Tests for the stopping conditions of the first car reaching the 
+ * edge of the board or the number of moves exceeding the best yet moves, or 
+ * 10 moves, whichever is smaller. If the stopping condition is not met, it 
+ * loops through all the cars in the array of cars testing a forward and backward
+ * move for each car. If a move is possible, the function is called recursively.
+ * If a solution is found, the best moves is updated to the current number of moves.
+ *
+ * @param cars The array of cars.
+ * @param board The 'visual' representation of the board.
+ * @param numCars Number of cars in the scenario.
+ * @param best The number of moves found in the best solution so far.
+ * @param moves The current number of moves for a given attempt.
+ *
+ * @return True if a solution is found; false if moves exceeds the best solution
+ * so far.
+ *
+ * @pre The car and board must be loaded, best initialized to the maximum
+ * number of moves, moves initialized.
+ * @post A solution is provided.
+ *
+**/
+bool solve(car*, char**, int, int&, int&);
 
+/**
+ * @name Print Grid
+ * @brief Prints a visual representation of the playing board.
+ * @detail Loops through the two-dimensional board array printing each column
+ * of each row.
+ *
+ * @param toPrint The board to be printed
+ *
+ * @pre Board is loaded.
+ * @post Board is printed to stdout.
+**/
 void printGrid(char**);
 	
 int main()
 {
 	int size;
+	int scenario = 1;
 	cin >> size;
 	car* grid = new car[size];
 	char** board = new char*[8];
@@ -86,7 +155,8 @@ int main()
 	if(solve(grid, board, size, best, moves))
 	{
 	}
-		cout << "The puzzle is solvable in " << best << " moves." << endl;
+		cout << "Scenario " << scenario << " requires " << best 
+			  << " moves" << endl;
 }
 
 bool moveForward(car* cars, int carNumber, char** board)
@@ -167,7 +237,7 @@ bool moveBackward(car* cars, int carNumber, char** board)
 	}
 }
 
-bool solve(car* cars, char* board[8], int numCars, int& best, int& moves)
+bool solve(car* cars, char** board, int numCars, int& best, int& moves)
 {
 	if(cars[0].xPos == 5)
 	{
