@@ -1,13 +1,28 @@
 /**
  * @file rushhour.cpp
  * @author Daniel Goodnow
+ *
+ * @mainpage A simple solution finder that models the popular commercial puzzle
+ * game Rush Hour.
+ *
+ * @detail The program accepts a string of input which describes the layout of
+ * the puzzle. It then builds a visual representation of the puzzle board and 
+ * uses a recursive algorithm to find the simplest solution to the puzzle. The
+ * current implementation only finds solutions that are possible in under 10 
+ * moves.
 */
 
 #include <iostream>
 
 using namespace std;
 
-
+/**
+ * @name car
+ * @param xPos Holds the starting x position of a car.
+ * @param yPos Holds the starting y position of a car.
+ * @param length Length of the car
+ * @param orientation Orientation of the car ('H' or 'V').
+**/
 struct car{
 	int xPos;
 	int yPos;
@@ -96,67 +111,77 @@ int main()
 	int size;
 	int scenario = 1;
 	cin >> size;
-	car* grid = new car[size];
-	char** board = new char*[8];
-	for(int i = 0; i < 8; i++)
+	while(size != 0)
 	{
-		board[i] = new char[8];
-	}
-	for(int i = 0; i < 8; i++)
-	{
-		for(int j = 0; j<8; j++)
+		car* grid = new car[size];
+		char** board = new char*[8];
+		for(int i = 0; i < 8; i++)
 		{
-			if(i == 0 || i==7 || j==0 || j==7)
+			board[i] = new char[8];
+		}
+		for(int i = 0; i < 8; i++)
+		{
+			for(int j = 0; j<8; j++)
 			{
-				board[i][j] = 'x';
+				if(i == 0 || i==7 || j==0 || j==7)
+				{
+					board[i][j] = 'x';
+				}
+				else
+				{
+					board[i][j] = ' ';
+				}
+			}
+		}
+		for( int i = 0; i < size; i++)
+		{
+			cin >> grid[i].length;
+			cin >> grid[i].orientation;
+			cin >> grid[i].yPos;
+			grid[i].yPos++;
+			cin >> grid[i].xPos;
+			grid[i].xPos++;
+			board[grid[i].xPos][grid[i].yPos] = 'x';
+			if(grid[i].orientation == 'H')
+			{
+				if(grid[i].length == 2)
+				{
+					board[grid[i].xPos+1][grid[i].yPos] = 'x';
+				}
+				else
+				{
+					board[grid[i].xPos+1][grid[i].yPos] = 'x';
+					board[grid[i].xPos+2][grid[i].yPos] = 'x';
+				}
 			}
 			else
 			{
-				board[i][j] = ' ';
+				if(grid[i].length == 2)
+				{
+					board[grid[i].xPos][grid[i].yPos+1] = 'x';
+				}
+				if(grid[i].length == 3)
+				{
+					board[grid[i].xPos][grid[i].yPos+1] = 'x';
+					board[grid[i].xPos][grid[i].yPos+2] = 'x';
+				}
 			}
 		}
-	}
-	for( int i = 0; i < size; i++)
-	{
-		cin >> grid[i].length;
-		cin >> grid[i].orientation;
-		cin >> grid[i].yPos;
-		grid[i].yPos++;
-		cin >> grid[i].xPos;
-		grid[i].xPos++;
-		board[grid[i].xPos][grid[i].yPos] = 'x';
-		if(grid[i].orientation == 'H')
+		int best = 10;
+		int moves = 0;
+		if(solve(grid, board, size, best, moves))
 		{
-			if(grid[i].length == 2)
-			{
-				board[grid[i].xPos+1][grid[i].yPos] = 'x';
-			}
-			else
-			{
-				board[grid[i].xPos+1][grid[i].yPos] = 'x';
-				board[grid[i].xPos+2][grid[i].yPos] = 'x';
-			}
 		}
-		else
-		{
-			if(grid[i].length == 2)
-			{
-				board[grid[i].xPos][grid[i].yPos+1] = 'x';
-			}
-			if(grid[i].length == 3)
-			{
-				board[grid[i].xPos][grid[i].yPos+1] = 'x';
-				board[grid[i].xPos][grid[i].yPos+2] = 'x';
-			}
-		}
-	}
-	int best = 10;
-	int moves = 0;
-	if(solve(grid, board, size, best, moves))
-	{
-	}
 		cout << "Scenario " << scenario << " requires " << best 
 			  << " moves" << endl;
+		scenario++;
+		cin >> size;
+		delete[] grid;
+		for(int i = 0; i < 8; i++)
+		{
+			delete[] board[i];
+		}
+	}
 }
 
 bool moveForward(car* cars, int carNumber, char** board)
