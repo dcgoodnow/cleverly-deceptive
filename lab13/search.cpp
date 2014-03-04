@@ -6,7 +6,7 @@ using namespace std;
 
 #include "Timer.h"
 
-const int numSearches = 5000000;
+const int numSearches = 100000;
 
 // ABC that gives an interface for the various search implementations
 // This allows each class to act like a function by defining
@@ -83,14 +83,14 @@ int main(int argc, char **argv) {
 	searchKeys.push_back(rand());
     }
 
-/*    // time linear search
+    // time linear search
     Timer t;
     t.start();
     for_each(searchKeys.begin(),
 	     searchKeys.end(),
 	     bind2nd(linearSearch(), keyList) );
     t.stop();
-    cout << "Linear Duration: " << t.getElapsedTime() << endl;*/
+    cout << "Linear Duration: " << t.getElapsedTime() << endl;
 
     // time binary search
     Timer u;

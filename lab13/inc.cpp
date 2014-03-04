@@ -11,7 +11,8 @@ int main(int argc, char **argv) {
     cout << endl << "Enter the number of values: ";
     int numValues;
     cin >> numValues;
-    TestVector test(numValues);
+    //TestVector test(numValues);
+	 double test = 0.0;
 
     Timer t;
     t.start();
