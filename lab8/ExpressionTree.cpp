@@ -19,14 +19,16 @@ void ExprTree<DataType>::build()
 template <typename DataType>
 void ExprTree<DataType>::buildBranch(char input, ExprTreeNode* parent)
 {
-	parent = new ExprTreeNode(input, NULL, NULL);
+	parent->left = new ExprTreeNode(input, NULL, NULL);
 	char nextIn;
 	cin >> nextIn;
 	if(input == '+' || input == '-' || input == '*' || input == '/')
 	{
 		buildBranch(nextIn, parent->left);
 	}
-	else
+	cin >> nextIn;
+	parent->right = new ExprTreeNode(nextIn, NULL, NULL);
+	if(input == '+' || input == '-' || input == '*' || input == '/')
 	{
 		buildBranch(nextIn, parent->right);
 	}
@@ -35,12 +37,6 @@ void ExprTree<DataType>::buildBranch(char input, ExprTreeNode* parent)
 template <typename DataType>
 void ExprTree<DataType>::expression() const
 {
-	ExprTreeNode* nodeTmp = root;
-	while(root->left != NULL)
-	{
-		root = root->left;
-	}
-	cout << root->dataItem;
 	
 }
 
