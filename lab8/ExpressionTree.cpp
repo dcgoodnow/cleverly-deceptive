@@ -41,25 +41,116 @@ void ExprTree<DataType>::expression() const
 	{
 		return;
 	}
-	inOrder(root->left);
+	inOrderPrint(root->left);
 	cout << root->dataItem;
-	inOrder(root->right);
+	inOrderPrint(root->right);
 }
 
 template <typename DataType>
-void ExprTree<DataType>::inOrder(ExprTreeNode* metaRoot)
+void ExprTree<DataType>::inOrderPrint(ExprTreeNode* metaRoot) const
 {
 	if(metaRoot == NULL)
 	{
 		return;
 	}
-	inOrder(metaRoot->left);
+	inOrderPrint(metaRoot->left);
 	cout << metaRoot->dataItem;
-	inOrder(metaRoot->right);
+	inOrderPrint(metaRoot->right);
 }
 
 template <typename DataType>
 void ExprTree<DataType>::clear()
 {
+	if(root == NULL)
+	{
+		return;
+	}
+	postOrderDelete(root->left);
+	postOrderDelete(root->right);
+	delete root;
+	root = NULL;
+}
 
+template <typename DataType>
+void ExprTree<DataType>::postOrderDelete(ExprTreeNode* metaRoot)
+{
+	if(metaRoot == NULL)
+	{
+		return;
+	}
+	postOrderDelete(metaRoot->left);
+	postOrderDelete(metaRoot->right);
+	delete metaRoot;
+	metaRoot = NULL;
+}
+
+template <typename DataType>
+DataType ExprTree<DataType>::evaluate() const throw (logic_error)
+{
+	if(root == NULL)
+	{
+		return 0;
+	}
+	DataType result = 0;
+	switch(root->dataItem)
+	{
+		case '+':
+			result = preOrderEvaluate(root->left) + preOrderEvaluate(root->right);
+			break;
+		case '-':
+			result = preOrderEvaluate(root->left) - preOrderEvaluate(root->right);
+			break;
+		case '*':
+			result = preOrderEvaluate(root->left) * preOrderEvaluate(root->right);
+			break;
+		case '/':
+			if(preOrderEvaluate(root->right == 0))
+			{
+				throw logic_error("ERROR: Divide by zero");
+			}
+			else
+			{
+				result = preOrderEvaluate(root->left) / preOrderEvaluate(root->right);
+			}
+			break;
+		default:
+			result = root->dataItem - 48;
+	}
+	return result;
+}
+
+template <typename DataType>
+DataType ExprTree<DataType>::preOrderEvaluate(ExprTreeNode* metaRoot)
+{
+	
+	if(metaRoot == NULL)
+	{
+		return 0;
+	}
+	DataType result = 0;
+	switch(metaRoot->dataItem)
+	{
+		case '+':
+			result = preOrderEvaluate(metaRoot->left) + preOrderEvaluate(metaRoot->right);
+			break;
+		case '-':
+			result = preOrderEvaluate(metaRoot->left) - preOrderEvaluate(metaRoot->right);
+			break;
+		case '*':
+			result = preOrderEvaluate(metaRoot->left) * preOrderEvaluate(metaRoot->right);
+			break;
+		case '/':
+			if(preOrderEvaluate(metaRoot->right == 0))
+			{
+				throw logic_error("ERROR: Divide by zero");
+			}
+			else
+			{
+				result = preOrderEvaluate(metaRoot->left) / preOrderEvaluate(metaRoot->right);
+			}
+			break;
+		default:
+			result = metaRoot->dataItem - 48;
+	}
+	return result;
 }
