@@ -61,6 +61,12 @@ class ExprTree {
     // Recursive helper functions for the public member functions -- insert
     // prototypes of these functions here.
 	 void buildBranch(char, ExprTreeNode*);
+	 void inOrderPrint(ExprTreeNode*) const;
+	 ExprTreeNode* inOrderCopy(ExprTreeNode*);
+	 void postOrderDelete(ExprTreeNode*);
+	 DataType preOrderEvaluate(ExprTreeNode*) const;
+	 void showHelper(ExprTreeNode*, int) const;
+	 void commuteHelper(ExprTreeNode*);
 
     // Data member
     ExprTreeNode *root;   // Pointer to the root node
