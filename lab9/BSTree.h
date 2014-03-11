@@ -70,6 +70,7 @@ class BSTree                                     // KeyType : key field
       void showHelper( BSTreeNode *p, int level ) const;
       void insertHelper( BSTreeNode* &ptr, const DataType& newDataItem);
       int heightHelper(BSTreeNode *parent) const;
+      int countHelper(BSTreeNode *parent) const;
       void clearHelper(BSTreeNode* &parent);
       bool retrieveHelper(const KeyType& searchKey, DataType& searchDataItem, 
                           BSTreeNode* parent) const;

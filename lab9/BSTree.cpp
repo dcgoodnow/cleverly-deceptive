@@ -158,6 +158,7 @@ template < typename DataType, class KeyType >
 void BSTree<DataType, KeyType>::writeKeys() const
 {
    keyHelper(root);
+   cout << endl;
 }
 
 template < typename DataType, class KeyType >   
@@ -168,9 +169,8 @@ void BSTree<DataType, KeyType>::keyHelper(BSTreeNode* parent) const
       return;
    }
    keyHelper(parent->left);
-   cout << parent->dataItem.getKey();
+   cout << parent->dataItem.getKey() << ' ';
    keyHelper(parent->right);
-   cout << parent->dataItem.getKey();
 }
 
 template < typename DataType, class KeyType >   
@@ -196,6 +196,21 @@ int BSTree<DataType, KeyType>::heightHelper(BSTreeNode *parent) const
    }
 }
 
+template < typename DataType, class KeyType >   
+int BSTree<DataType, KeyType>::getCount() const
+{
+   return countHelper(root);
+}
+
+template < typename DataType, class KeyType >   
+int BSTree<DataType, KeyType>::countHelper(BSTreeNode *parent) const
+{
+   if(parent == NULL)
+   {
+      return 0;
+   }
+   return countHelper(parent->left) + countHelper(parent->right) + 1;
+}
 
 template < typename DataType, class KeyType >   
 void BSTree<DataType, KeyType>::clear()
