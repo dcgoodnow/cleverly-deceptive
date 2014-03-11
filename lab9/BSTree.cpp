@@ -88,13 +88,25 @@ bool BSTree<DataType, KeyType>::isEmpty () const
 template < typename DataType, class KeyType >   
 bool BSTree<DataType, KeyType>::remove ( const KeyType& deleteKey )
 {
-   removeHelper(root, deleteKey);
+   return removeHelper(root, deleteKey);
 }
 
 template < typename DataType, class KeyType >   
 bool BSTree<DataType, KeyType>::removeHelper(BSTreeNode* parent,  const KeyType& deleteKey)
 {
-
+   if(parent == NULL)
+   {
+      return false;
+   }
+   if(deleteKey == parent->dataItem.getKey())
+   {
+      if(parent->left == NULL && parent->right == NULL)
+      {
+         delete parent;
+         parent = NULL;
+         return true;
+      }
+   }
 }
 
 template < typename DataType, class KeyType >   
