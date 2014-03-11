@@ -106,6 +106,42 @@ bool BSTree<DataType, KeyType>::removeHelper(BSTreeNode* parent,  const KeyType&
          parent = NULL;
          return true;
       }
+      if(parent->left == NULL)
+      {
+         BSTreeNode* tmp = parent->right;
+         parent->dataItem = tmp->dataItem;
+         parent->left = tmp->left;
+         parent->right = parent;
+         delete tmp;
+         return true;
+      }
+      if(parent->right == NULL)
+      {
+         BSTreeNode* tmp = parent->left;
+         parent->dataItem = tmp->dataItem;
+         parent->right = tmp->right;
+         parent->left = parent;
+         delete tmp;
+         return true;
+      }
+      else
+      {
+         BSTreeNode* tmp = parent->left; while(tmp->right != NULL)
+         {
+            tmp = tmp->right;
+         }
+         parent->dataItem = tmp->dataItem;
+         removeHelper(parent->left, tmp->dataItem.getKey());
+         return true;
+      }
+   }
+   if(deleteKey < parent->dataItem.getKey())
+   {
+      removeHelper(parent->left, deleteKey);
+   }
+   if(deleteKey > parent->dataItem.getKey())
+   {
+      removeHelper(parent->right, deleteKey);
    }
 }
 
