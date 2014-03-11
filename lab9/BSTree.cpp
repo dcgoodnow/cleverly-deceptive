@@ -91,4 +91,27 @@ int BSTree<DataType, KeyType>::heightHelper(BSTreeNode *parent) const
 }
 
 
+template < typename DataType, class KeyType >   
+void BSTree<DataType, KeyType>::clear()
+{
+   clearHelper(root);
+}
 
+template < typename DataType, class KeyType >   
+void BSTree<DataType, KeyType>::clearHelper(BSTreeNode* &parent)
+{
+   if(parent == NULL)
+   {
+      return;
+   }
+   if(parent->right != NULL)
+   {
+      clearHelper(parent->right);
+   }
+   if(parent->left != NULL)
+   {
+      clearHelper(parent->left);
+   }
+   delete parent;
+   parent = NULL;
+}
