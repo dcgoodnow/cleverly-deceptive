@@ -71,6 +71,9 @@ class BSTree                                     // KeyType : key field
       void insertHelper( BSTreeNode* &ptr, const DataType& newDataItem);
       int heightHelper(BSTreeNode *parent) const;
       void clearHelper(BSTreeNode* &parent);
+      bool retrieveHelper(const KeyType& searchKey, DataType& searchDataItem, 
+                          BSTreeNode* parent) const;
+      bool removeHelper(BSTreeNode* parent, const KeyType& deleteKey);
       // Data member
       BSTreeNode *root;   // Pointer to the root node
 };
