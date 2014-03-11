@@ -73,7 +73,8 @@ class BSTree                                     // KeyType : key field
       void clearHelper(BSTreeNode* &parent);
       bool retrieveHelper(const KeyType& searchKey, DataType& searchDataItem, 
                           BSTreeNode* parent) const;
-      bool removeHelper(BSTreeNode* parent, const KeyType& deleteKey);
+      bool removeHelper(BSTreeNode* &parent, const KeyType& deleteKey);
+      void keyHelper(BSTreeNode* parent) const;
       // Data member
       BSTreeNode *root;   // Pointer to the root node
 };
