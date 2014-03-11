@@ -31,12 +31,12 @@ void BSTree<DataType, KeyType>::insertHelper( BSTreeNode* &ptr,
       ptr = new BSTreeNode(newDataItem, NULL, NULL);
       return;
    }
-   if(ptr->dataItem > newDataItem)
+   if(ptr->dataItem.getKey() > newDataItem.getKey())
    {
       insertHelper(ptr->left, newDataItem);
       return;
    }
-   if(ptr->dataItem < newDataItem)
+   if(ptr->dataItem.getKey() < newDataItem.getKey())
    {
       insertHelper(ptr->right, newDataItem);
       return;
@@ -48,7 +48,31 @@ template < typename DataType, class KeyType >
 bool BSTree<DataType, KeyType>::retrieve ( const KeyType& searchKey,
                                            DataType& searchDataItem ) const
 {
-   //stub
+   retrieveHelper(searchKey, searchDataItem, root);
+}
+
+template < typename DataType, class KeyType >   
+bool BSTree<DataType, KeyType>::retrieveHelper(const KeyType& searchKey,
+                                               DataType& searchDataItem,
+                                               BSTreeNode* parent) const
+{
+   if(parent == NULL)
+   {
+      return false;
+   }
+   if(searchKey == parent->dataItem.getKey())
+   {
+      searchDataItem = parent->dataItem;
+      return true;
+   }
+   if(retrieveHelper(searchKey, searchDataItem, parent->left))
+   {
+      return retrieveHelper(searchKey, searchDataItem, parent->left);
+   }
+   if(retrieveHelper(searchKey, searchDataItem, parent->right))
+   {
+      return retrieveHelper(searchKey, searchDataItem, parent->right);
+   }
 }
 
 template < typename DataType, class KeyType >   
@@ -64,7 +88,13 @@ bool BSTree<DataType, KeyType>::isEmpty () const
 template < typename DataType, class KeyType >   
 bool BSTree<DataType, KeyType>::remove ( const KeyType& deleteKey )
 {
-   //stub
+   removeHelper(root, deleteKey);
+}
+
+template < typename DataType, class KeyType >   
+bool BSTree<DataType, KeyType>::removeHelper(BSTreeNode* parent,  const KeyType& deleteKey)
+{
+
 }
 
 template < typename DataType, class KeyType >   
@@ -115,3 +145,4 @@ void BSTree<DataType, KeyType>::clearHelper(BSTreeNode* &parent)
    delete parent;
    parent = NULL;
 }
+
