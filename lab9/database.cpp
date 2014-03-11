@@ -98,6 +98,10 @@ int main ()
               << acctRec.firstName << " " << acctRec.lastName << " " 
               << acctRec.balance << endl;
       }
+      else
+      {
+         cout << "No record with that account ID" << endl;
+      }
       cout << "Enter account ID (EOF to quit): ";
       cin >> searchID;
    }
