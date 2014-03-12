@@ -68,6 +68,7 @@ class BSTree                                     // KeyType : key field
       // Recursive helpers for the public member functions -- insert
       // prototypes of these functions here.
       void showHelper( BSTreeNode *p, int level ) const;
+		void copyHelper( BSTreeNode* parent, BSTreeNode* &destParent);
       void insertHelper( BSTreeNode* &ptr, const DataType& newDataItem);
       int heightHelper(BSTreeNode *parent) const;
       int countHelper(BSTreeNode *parent) const;

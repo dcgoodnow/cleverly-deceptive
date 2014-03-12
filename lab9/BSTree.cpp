@@ -11,33 +11,6 @@
 #include "BSTree.h"
 
 /**
- * @name Constructor
- * @brief Constructor for the Binary search tree.
- * 
- * @pre The tree is non existent
- *
- * @post The tree is instantiated
-*/
-template < typename DataType, class KeyType >   
-BSTree<DataType, KeyType>::BSTree()
-{
-   root = NULL;
-}
-
-/**
- * @name Destructor
- * @brief Deletes all memory allocated for the BST.
- *
- * @pre The tree exists.
- * @post The tree is deallocated from memory.
-*/
-template < typename DataType, class KeyType >   
-BSTree<DataType, KeyType>::~BSTree()
-{
-   clear();
-}
-
-/**
  * @name Node Constructor
  * @brief Constructor for BST node.
  *
@@ -57,6 +30,95 @@ BSTree<DataType, KeyType>::BSTreeNode::BSTreeNode( const DataType &nodeDataItem,
    left = leftPtr;
    right = rightPtr;
 }
+
+/**
+ * @name Constructor
+ * @brief Constructor for the Binary search tree.
+ * 
+ * @pre The tree is non existent
+ *
+ * @post The tree is instantiated
+*/
+template < typename DataType, class KeyType >   
+BSTree<DataType, KeyType>::BSTree()
+{
+   root = NULL;
+}
+
+/**
+ * @name Copy Constructor
+ * @brief Constructs a new tree which is a copy of the parameter.
+ *
+ * @param other The tree to copy
+ *
+ * @pre The tree does not exist.
+ * @post The tree exists as a copy of other.
+*/
+template < typename DataType, class KeyType >   
+BSTree<DataType, KeyType>::BSTree ( const BSTree<DataType,KeyType>& other )
+{
+	root = NULL;
+	*this = other;
+}
+
+/**
+ * @name Assignment Operator
+ * @brief Copies other tree into this one.
+ *
+ * @param other The tree to copy from.
+ *
+ * @pre The tree exists.
+ * @post The tree is a copy of other.
+*/
+template < typename DataType, class KeyType >   
+BSTree<DataType, KeyType>& BSTree<DataType, KeyType>::operator=( const BSTree<DataType,KeyType>& other )
+{
+	if(this == &other)
+	{
+		return *this;
+	}
+	clear();
+	copyHelper(other.root, root);
+	return *this;
+}
+
+/**
+ * @name Copy Helper
+ * @brief Recursive copy function
+ * @detail Uses an in-order traversal to copy all nodes from one tree to 
+ * another.
+ *
+ * @param parent The root of the tree (or subtree) being copied from.
+ * @param destParent The root of the tree (or subtree) being copied to. 
+ *
+ * @pre The branch exists.
+ * @post The branch is copied.
+*/
+template < typename DataType, class KeyType >   
+void BSTree<DataType, KeyType>::copyHelper( BSTreeNode* parent, BSTreeNode* &destParent)
+{
+	if(parent == NULL)
+	{
+		destParent = NULL;
+		return;
+	}
+	destParent->dataItem = parent->dataItem;
+	copyHelper(parent->left, destParent->left);
+	copyHelper(parent->right, destParent->right);
+}
+/**
+ * @name Destructor
+ * @brief Deletes all memory allocated for the BST.
+ *
+ * @pre The tree exists.
+ * @post The tree is deallocated from memory.
+*/
+template < typename DataType, class KeyType >   
+BSTree<DataType, KeyType>::~BSTree()
+{
+   clear();
+}
+
 
 /**
  * @name Insert
