@@ -73,7 +73,7 @@ int main ()
 
 
    // Output the account IDs in ascending order.
-   cout << "Account IDs : " << endl;
+   cout << endl << "Account IDs : " << endl;
    index.writeKeys();
    cout << endl;
 
@@ -84,7 +84,6 @@ int main ()
 
    // Read an account ID from the keyboard and output the
    // corresponding record.
-   char* temp = new char[39];
    cout << "Enter account ID : ";
    cin >> searchID;
    while(cin.good())
