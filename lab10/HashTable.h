@@ -13,29 +13,29 @@ using namespace std;
 
 template <typename DataType, typename KeyType>
 class HashTable {
-  public:
-    HashTable(int initTableSize);
-    HashTable(const HashTable& other);
-    HashTable& operator=(const HashTable& other);
+   public:
+      HashTable(int initTableSize);
+      HashTable(const HashTable& other);
+      HashTable& operator=(const HashTable& other);
 
-    ~HashTable();
+      ~HashTable();
 
-    void insert(const DataType& newDataItem);
-    bool remove(const KeyType& deleteKey);
-    bool retrieve(const KeyType& searchKey, DataType& returnItem) const;
-    void clear();
+      void insert(const DataType& newDataItem);
+      bool remove(const KeyType& deleteKey);
+      bool retrieve(const KeyType& searchKey, DataType& returnItem) const;
+      void clear();
 
-    bool isEmpty() const;
+      bool isEmpty() const;
 
-    void showStructure() const;
+      void showStructure() const;
 
-    double standardDeviation() const;
+      double standardDeviation() const;
 
-  private:
-    void copyTable(const HashTable& source);
+   private:
+      void copyTable(const HashTable& source);
 
-    int tableSize;
-    BSTree<DataType, KeyType>* dataTable;
+      int tableSize;
+      BSTree<DataType, KeyType>* dataTable;
 };
 
 #endif	// ifndef HASHTABLE_H
