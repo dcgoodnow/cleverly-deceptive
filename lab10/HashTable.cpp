@@ -8,11 +8,48 @@ HashTable<DataType, KeyType>::HashTable(int initTableSize)
 	dataTable = new BSTree<DataType, KeyType>[initTableSize];
 }
 
+template <typename DataType, typename KeyType>
+HashTable<DataType, KeyType>::HashTable(const HashTable& other)
+{
+	tableSize = other.tableSize;
+	dataTable = new BSTree<DataType, KeyType>[tableSize];
+	if(!other.isEmpty())
+	{
+		for(int i = 0; i < tableSize; i++)
+		{
+			dataTable[i] = other.dataTable[i];
+		}
+	}
+}
+
+template <typename DataType, typename KeyType>
+HashTable<DataType, KeyType>& HashTable<DataType, KeyType>::operator=(const HashTable& other)
+{
+	if(this == &other)
+	{
+		return *this;
+	}
+	clear();
+	if(other.isEmpty())
+	{
+		return *this;
+	}
+	tableSize = other.tableSize;
+	dataTable = new BSTree<DataType, KeyType>[tableSize];
+	if(!other.isEmpty())
+	{
+		for(int i = 0; i < tableSize; i++)
+		{
+			dataTable[i] = other.dataTable[i];
+		}
+	}
+	return *this;
+}
 
 template <typename DataType, typename KeyType>
 void HashTable<DataType, KeyType>::insert(const DataType& newDataItem)
 {
-	int h = newDataItem.hash();
+	int h = newDataItem.hash(newDataItem.getKey());
 	dataTable[h%tableSize].insert(newDataItem);
 }
 
@@ -23,7 +60,7 @@ bool HashTable<DataType, KeyType>::remove(const KeyType& deleteKey)
 	{
 		return false;
 	}
-	if(dataTable[deleteKey.hash()%tableSize].remove(deleteKey))
+	if(dataTable[deleteKey.hash(deleteKey)%tableSize].remove(deleteKey))
 	{
 		return true;
 	}
@@ -38,7 +75,7 @@ bool HashTable<DataType, KeyType>::retrieve(const KeyType& searchKey,
 	{
 		return false;
 	}
-	if(dataTable[searchKey.hash()%tableSize].retrieve(searchKey, returnItem))
+	if(dataTable[searchKey.hash(searchKey)%tableSize].retrieve(searchKey, returnItem))
 	{
 		return true;
 	}
@@ -53,3 +90,16 @@ void HashTable<DataType, KeyType>::clear()
 		dataTable[i].clear();
 	}
 }
+
+template <typename DataType, typename KeyType>
+bool HashTable<DataType, KeyType>::isEmpty() const
+{
+	for(int i = 0; i < tableSize; i++)
+	{
+		if(!dataTable[i].isEmpty())
+		{
+			return false;
+		}
+	}
+}
+
