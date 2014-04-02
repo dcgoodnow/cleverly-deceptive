@@ -47,10 +47,18 @@ HashTable<DataType, KeyType>& HashTable<DataType, KeyType>::operator=(const Hash
 }
 
 template <typename DataType, typename KeyType>
+HashTable<DataType, KeyType>::~HashTable()
+{
+   clear();
+   delete[] dataTable;
+   dataTable = NULL;
+}
+
+template <typename DataType, typename KeyType>
 void HashTable<DataType, KeyType>::insert(const DataType& newDataItem)
 {
 	int h = newDataItem.hash(newDataItem.getKey());
-	dataTable[h%tableSize].insert(newDataItem);
+	dataTable[(h%tableSize)].insert(newDataItem);
 }
 
 template <typename DataType, typename KeyType>
@@ -60,7 +68,8 @@ bool HashTable<DataType, KeyType>::remove(const KeyType& deleteKey)
 	{
 		return false;
 	}
-	if(dataTable[deleteKey.hash(deleteKey)%tableSize].remove(deleteKey))
+	DataType temp;
+	if(dataTable[temp.hash(deleteKey)%tableSize].remove(deleteKey))
 	{
 		return true;
 	}
@@ -75,7 +84,8 @@ bool HashTable<DataType, KeyType>::retrieve(const KeyType& searchKey,
 	{
 		return false;
 	}
-	if(dataTable[searchKey.hash(searchKey)%tableSize].retrieve(searchKey, returnItem))
+	DataType temp;
+	if(dataTable[temp.hash(searchKey)%tableSize].retrieve(searchKey, returnItem))
 	{
 		return true;
 	}
@@ -103,3 +113,10 @@ bool HashTable<DataType, KeyType>::isEmpty() const
 	}
 }
 
+template <typename DataType, typename KeyType>
+void HashTable<DataType, KeyType>::showStructure() const {
+    for (int i = 0; i < tableSize; ++i) {
+	cout << i << ": ";
+	dataTable[i].writeKeys();
+    }
+}
