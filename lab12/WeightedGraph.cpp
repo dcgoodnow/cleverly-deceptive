@@ -120,3 +120,20 @@ void WeightedGraph::removeVertex(const string& v) throw (logic_error)
 	}
 }
 
+bool WeightedGraph::isEmpty() const
+{
+	if(size == 0)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool WeightedGraph::isFull() const
+{
+	if(size-1 == maxSize)
+	{
+		return true;
+	}
+	return false;
+}
