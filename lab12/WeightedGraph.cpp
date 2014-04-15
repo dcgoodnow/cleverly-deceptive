@@ -89,6 +89,7 @@ void WeightedGraph::insertEdge( const string& v1, const string& v2, int wt) thro
 	{
 		cNum++;
 	}
+	cout << "Size = " << size << ", idx_v1 = " << rNum << ", idx_v2 = " << cNum << endl;
 	adjMatrix[toArr(rNum,cNum)] = wt;
 	adjMatrix[toArr(cNum,rNum)] = wt;
 }
@@ -103,7 +104,6 @@ bool WeightedGraph::retrieveVertex(const string& v, Vertex& vData) const
 	while(i < size-1 && v != vertexList[i].getLabel()) //fix these conditionals
 	{
 		i++;
-		cout << i << endl;
 	}
 	
 	if(v == vertexList[i].getLabel())
@@ -145,30 +145,30 @@ void WeightedGraph::removeVertex(const string& v) throw (logic_error)
 	{
 		return;
 	}
-	if(isFull())
-	{
-		size--;
-		return;
-	}
 	Vertex toRemove;
 	if(!retrieveVertex(v, toRemove))
 	{
 		return;
 	}
-	int t = 0;
-	while( v != vertexList[t].getLabel()){t++;}
-
-	for(int i = t+1; i < size; i++)
+	int i = 0;
+	while(v != vertexList[i].getLabel())
 	{
-		vertexList[i-1] = vertexList[i];
-		for(int j = 0; j < size; j++)
+		i++;
+	}
+	for(int j = i+1; j < size; j++)
+	{
+		vertexList[j-1] = vertexList[j];
+		for(int k = 0; k < size; k++)
 		{
-			adjMatrix[toArr(i-1, j)] = adjMatrix[toArr(i, j)];
+			adjMatrix[toArr(j-1, k)] = adjMatrix[toArr(j,k)];
 		}
 	}
-	for(int i = 0; i < size; i++)
+	for(int j = 0; j < size; j++)
 	{
-		adjMatrix[toArr(t, i)] = adjMatrix[toArr(t+1, i)];
+		for(int k = i+1; k < size; k++)
+		{
+			adjMatrix[toArr(j, k-1)] = adjMatrix[toArr(j,k)];
+		}
 	}
 	size--;
 }
@@ -268,11 +268,11 @@ void WeightedGraph::getPaths() const
 		{
 			for(int m = 0; m<size; ++m)
 			{
-				if(adjMatrix[toArr(j,m)] != INFINITE_EDGE_WT &&
-					adjMatrix[toArr(m,k)] != INFINITE_EDGE_WT &&
-					adjMatrix[toArr(j,m)] + adjMatrix[toArr(m,k)] < pathMatrix[toArr(j,k)])
+				if(pathMatrix[toArr(j,m)] != INFINITE_EDGE_WT &&
+					pathMatrix[toArr(m,k)] != INFINITE_EDGE_WT &&
+					(pathMatrix[toArr(j,m)] + pathMatrix[toArr(m,k)]) < pathMatrix[toArr(j,k)])
 				{
-					pathMatrix[toArr(j,k)] = adjMatrix[toArr(j,m)]+adjMatrix[toArr(m,k)];
+					pathMatrix[toArr(j,k)] = pathMatrix[toArr(j,m)]+pathMatrix[toArr(m,k)];
 				}
 			}
 		}
@@ -295,9 +295,7 @@ void WeightedGraph::showStructure () const
        cout << endl << "Vertex list : " << endl;
        for ( int row = 0 ; row < size ; row++ )
            cout << row << '\t' << vertexList[row].getLabel()
-#if LAB12_TEST2
-		<< vertexList[row].color
-#endif
+		<< '\t' << vertexList[row].getColor()
 		<< endl;
 
        cout << endl << "Edge matrix : " << endl << '\t';
@@ -340,5 +338,27 @@ bool WeightedGraph::hasProperColoring() const
 
 bool WeightedGraph::areAllEven() const
 {
+	if(isEmpty()){return true;}
+	
+	int degree;
+	for(int i = 0; i < size; i++)
+	{
+		degree=0;
+		for(int j = 0; j < size; j++)
+		{
+			if(adjMatrix[toArr(i,j)] != INFINITE_EDGE_WT)
+			{
+				degree++;
+				if(i == j)
+				{
+					degree++;
+				}
+			}
+		}
+		if(degree%2 == 1)
+		{
+			return false;
+		}
+	}
 	return true;
 }
