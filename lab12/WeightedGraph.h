@@ -84,6 +84,7 @@ class WeightedGraph
     int getEdge ( int row, int col ) const;          // Get edge weight using
                                                //   adjacency matrix indices
     void setEdge ( int row, int col, int wt);  // Set edge weight using
+	 inline int toArr(int x, int y) const {return y*maxSize + x;}
                                                //   adjacency matrix indices
     // Data members
     int maxSize,          // Maximum number of vertices in the graph
