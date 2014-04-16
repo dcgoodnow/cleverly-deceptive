@@ -1,5 +1,25 @@
+/**
+ * @file WeightedGraph.cpp
+ * @author Daniel Goodnow
+ * @mainpage Graph
+ * @detail A basic ADT to store a graph data structure. It utilizes an adjacency
+ * matrix to store edge data as well as a list of all vertexes. For some reason
+ * a one dimension array is used to store the matrix which increases 
+ * computation time when accessing the matrix. Also, it includes functions to 
+ * generate a path matrix as well as perform color adjacency and even degree
+ * tests. 
+*/
 #include "WeightedGraph.h"
 
+/**
+ * @name Constructor
+ * @brief Allocates and initializes data members.
+ *
+ * @param maxNumber Maximum size of the array.
+ *
+ * @pre none
+ * @post Graph exists
+*/
 WeightedGraph::WeightedGraph(int maxNumber)
 {
 	maxSize = maxNumber;
@@ -9,6 +29,14 @@ WeightedGraph::WeightedGraph(int maxNumber)
 	vertexList = new Vertex[maxSize];
 }
 
+/**
+ *	@name Destructor
+ *	@brief Deallocates all memory for the graph.
+ *
+ *	@pre Graph exists.
+ *	@post Graph no longer exists.
+ *
+*/
 WeightedGraph::~WeightedGraph()
 {
 	size = 0;
@@ -17,6 +45,15 @@ WeightedGraph::~WeightedGraph()
 	delete[] adjMatrix;
 }
 
+/**
+ * @name Copy Constructor
+ * @brief Creates a new graph that is a copy of other.
+ *
+ * @param other The graph to be copied from.
+ *
+ * @pre other exists.
+ * @post New graph is created.
+*/
 WeightedGraph::WeightedGraph(const WeightedGraph& other)
 {
 	maxSize = other.maxSize;
@@ -33,6 +70,15 @@ WeightedGraph::WeightedGraph(const WeightedGraph& other)
 	}
 }
 
+/**
+ * @name Overloaded Assignment Operator
+ * @brief Copies other into this graph.
+ *
+ * @param other The graph to be copied from.
+ *
+ * @pre Graph exists and other exists.
+ * @post Graph is a copy of other.
+*/
 WeightedGraph& WeightedGraph::operator=(const WeightedGraph& other)
 {
 	if(this == &other)
@@ -58,6 +104,15 @@ WeightedGraph& WeightedGraph::operator=(const WeightedGraph& other)
 	return *this;
 }
 
+/**
+ * @name Insert Vertex
+ * @brief inserts a new vertex into the graph.
+ *
+ * @param newVertex The vertex to be inserted into the graph.
+ *
+ * @pre Graph exists and is not full.
+ * @post Graph contains the new Vertex and size is increased by 1.
+*/
 void WeightedGraph::insertVertex(const Vertex& newVertex) throw (logic_error)
 {
 	if(isFull())
@@ -73,6 +128,19 @@ void WeightedGraph::insertVertex(const Vertex& newVertex) throw (logic_error)
 	}
 }
 
+/**
+ * @name Insert Edge
+ * @brief Inserts a new edge into the adjacency matrix.
+ * @detail Finds the indices of the two vertices and inserts the value wt at the
+ * intersection of the indices on the adjacency matrix.
+ *
+ * @param v1 The first vertex.
+ * @param v2 The second vertex.
+ * @param wt The weight of the edge.
+ *
+ * @pre The graph and both vertices exist.
+ * @post The graph contains a new edge.
+*/
 void WeightedGraph::insertEdge( const string& v1, const string& v2, int wt) throw (logic_error)
 {
 	Vertex temp, temp2;
@@ -94,6 +162,19 @@ void WeightedGraph::insertEdge( const string& v1, const string& v2, int wt) thro
 	adjMatrix[toArr(cNum,rNum)] = wt;
 }
 
+/**
+ * @name Retrieve Vertex
+ * @brief Searches the vertex list for the vertex with label v and returns it
+ * with the parameter vData.
+ *
+ * @param v The label of the vertex being searched for.
+ * @param vData The found vertex.
+ *
+ * @retval True if found, false if not.
+ * 
+ * @pre Graph exists.
+ * @post none
+*/
 bool WeightedGraph::retrieveVertex(const string& v, Vertex& vData) const
 {
 	if(isEmpty())
@@ -114,6 +195,16 @@ bool WeightedGraph::retrieveVertex(const string& v, Vertex& vData) const
 	return false;
 }
 
+/**
+ * @name Get Edge Weight
+ * @brief Gets the weight of the edge between two vertices if those vertices exist.
+ *
+ * @param v1 First vertex.
+ * @param v2 Second vertex.
+ * @param wt The weight of the edge between the two vertices.
+ *
+ * @retval True if vertices exist, false if not.
+*/
 bool WeightedGraph::getEdgeWeight(const string& v1, const string& v2, int& wt) const 
 		throw (logic_error)
 {
@@ -139,6 +230,16 @@ bool WeightedGraph::getEdgeWeight(const string& v1, const string& v2, int& wt) c
 	return false;
 }
 
+/**
+ * @name Remove Vertex
+ * @brief Removes a vertex by shifting all data past the index of the vertex 
+ * down by one in both the vertex list and adjacency matrix.
+ *
+ * @param v Label of the vertex to remove.
+ * 
+ * @pre Graph is not empty and vertex with label v exists.
+ * @post Vertex is remove and size is decreased by one.
+*/
 void WeightedGraph::removeVertex(const string& v) throw (logic_error)
 {
 	if(isEmpty())
@@ -173,6 +274,17 @@ void WeightedGraph::removeVertex(const string& v) throw (logic_error)
 	size--;
 }
 
+/**
+ * @name Remove Edge
+ * @brief Removes an edge from the adjacency matrix.
+ * @detail Finds the edge and sets it to INFINITE_EDGE_WIDTH
+ *
+ * @param v1 First vertex.
+ * @param v2 Second vertex.
+ * 
+ * @pre Edge exists.
+ * @post Edge is removed.
+*/
 void WeightedGraph::removeEdge(const string& v1, const string& v2) throw (logic_error)
 {
 	if(isEmpty() || size == 1)
@@ -197,6 +309,15 @@ void WeightedGraph::removeEdge(const string& v1, const string& v2) throw (logic_
 	adjMatrix[toArr(cNum,rNum)] = INFINITE_EDGE_WT;
 }
 
+/**
+ * @name Is Empty
+ * @brief Determines whether a graph is empty or not.
+ *
+ * @retval True if empty, false if otherwise.
+ * 
+ * @pre Graph exists.
+ * @post none
+*/
 bool WeightedGraph::isEmpty() const
 {
 	if(size == 0)
@@ -206,6 +327,16 @@ bool WeightedGraph::isEmpty() const
 	return false;
 }
 
+/**
+ * @name Is Full
+ * @brief Determines whether a graph is full or not.
+ *
+ * @retval True if full, false if otherwise.
+ *
+ * @pre Graph exists.
+ * @post none
+ *
+*/
 bool WeightedGraph::isFull() const
 {
 	if(size-1 == maxSize)
@@ -215,11 +346,25 @@ bool WeightedGraph::isFull() const
 	return false;
 }
 
+/**
+ * @name clear
+ * @brief Makes the graph 'empty'.
+ *
+ * @pre Graph exists.
+ * @post Graph is empty.
+*/
 void WeightedGraph::clear()
 {
 	size = 0;
 }
 
+/**
+ * @name Show Shortest Paths
+ * @brief Gets the shortest path matrix and outputs it.
+ *
+ * @pre Graph exists.
+ * @post Path graph is output to std out.
+*/
 void WeightedGraph::showShortestPaths() const
 {
 	getPaths();
@@ -246,6 +391,14 @@ void WeightedGraph::showShortestPaths() const
 	}
 }
 
+/**
+ * @name Get Paths
+ * @brief Helper function for showShortestPaths.
+ * @detail Uses Floyd's algorithm to generate a path matrix.
+ *
+ * @pre Graph exists
+ * @post Path matrix is updated.
+*/
 void WeightedGraph::getPaths() const
 {
 	if(isEmpty()){return;}
@@ -278,6 +431,19 @@ void WeightedGraph::getPaths() const
 		}
 	}
 }
+
+/**
+ * @name Get Edge
+ * @brief Returns the edge at the given row and column.
+ *
+ * @param r Row
+ * @param c Column
+ *
+ * @retval Edge weight at r,c.
+ *
+ * @pre Graph exists.
+ * @post none
+**/
 int WeightedGraph::getEdge(int r, int c) const
 {
 	return adjMatrix[toArr(r,c)];
@@ -318,6 +484,15 @@ void WeightedGraph::showStructure () const
     }
 }
 
+/**
+ * @name Has Proper Coloring
+ * @brief Checks vertices at each edge for same color.
+ *
+ * @retval True if no adjacent vertices have the same color, false otherwise.
+ *
+ * @pre Graph is not empty.
+ * @post none
+ */
 bool WeightedGraph::hasProperColoring() const
 {
 	if(isEmpty()){return true;}
@@ -336,6 +511,15 @@ bool WeightedGraph::hasProperColoring() const
 	return true;
 }
 
+/**
+ * @name Are All Even
+ * @brief Checks the degree of all vertices.
+ *
+ * @retval True if all vertices have even degrees.
+ *
+ * @pre Graph is not empty.
+ * @post none
+ */
 bool WeightedGraph::areAllEven() const
 {
 	if(isEmpty()){return true;}
