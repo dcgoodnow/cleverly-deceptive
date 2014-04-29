@@ -16,6 +16,7 @@
 #include <queue>
 #include <algorithm>
 #include <map>
+#include <string>
 
 
 using namespace std;
@@ -109,12 +110,17 @@ bool solve(car*, char**, int, int&, int&);
  * @post Board is printed to stdout.
 **/
 void printGrid(char**);
+
+string makeString(char**, int);
+
+void copyBoard(char** a, char** b,int size);
 	
 int main()
 {
 	int size;
 	int scenario = 1;
 	queue<char**> boards;
+	map<string, int> dejaVu;
 	cin >> size;
 	while(size != 0)
 	{
@@ -172,14 +178,27 @@ int main()
 				}
 			}
 		}
-		int best = 10;
+		int best = 40;
 		int moves = 0;
-		if(solve(grid, board, size, best, moves))
+		string key = makeString(board,size);
+		boards.push(board);
+		dejaVu.insert(pair<string, int>(key,1));
+		char** temp = NULL;
+
+		while(!boards.empty())
 		{
+			copyBoard(boards.front(), temp, size);
+			boards.pop();
+			if(checkSoln()
+			{
+				break;
+			}
+			for(int i = 0; i < size; i++)
+			{
+				if(moveForward(grid, i, temp)
+			}
 		}
-		cout << "Scenario " << scenario << " requires " << best 
-			  << " moves" << endl;
-		scenario++;
+
 		cin >> size;
 		delete[] grid;
 		for(int i = 0; i < 8; i++)
@@ -307,3 +326,27 @@ void printGrid(char** toPrint)
 		cout << endl;
 	}
 }
+
+string makeString(char** b, int size)
+{
+	string temp;
+	for(int i = 0; i < size; i++)
+	{
+		temp += b[i];
+	}
+}
+
+void copyBoard(char** a, char** b,int size)
+{
+	b = new char*[size];
+	for(int i = 0; i < size; i++)
+	{
+		b[i] = new char[size];
+		for(int j = 0; j < size; j++)
+		{
+			b[i][j] = a[i][j];
+		}
+	}
+}
+
+bool checkSoln(char** board, size);
