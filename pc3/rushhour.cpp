@@ -111,24 +111,34 @@ bool solve(car*, char**, int, int&, int&);
 **/
 void printGrid(char**);
 
-string makeString(char**, int);
+string makeString(char**);
 
-void copyBoard(char** a, char** b,int size);
+
+struct puzzle{
+	char** board;
+	car* grid;
+	int moves;
+};
+
+void copyPuzzle(puzzle a, puzzle  b, int size);
+
+bool checkSoln(puzzle test);
 	
 int main()
 {
 	int size;
 	int scenario = 1;
-	queue<char**> boards;
+	queue<puzzle> boards;
 	map<string, int> dejaVu;
 	cin >> size;
 	while(size != 0)
 	{
-		car* grid = new car[size];
-		char** board = new char*[8];
+		puzzle attempt;
+		attempt.grid = new car[size];
+		attempt.board = new char*[8];
 		for(int i = 0; i < 8; i++)
 		{
-			board[i] = new char[8];
+			attempt.board[i] = new char[8];
 		}
 		for(int i = 0; i < 8; i++)
 		{
@@ -136,74 +146,99 @@ int main()
 			{
 				if(i == 0 || i==7 || j==0 || j==7)
 				{
-					board[i][j] = 'x';
+					attempt.board[i][j] = 'x';
 				}
 				else
 				{
-					board[i][j] = ' ';
+					attempt.board[i][j] = ' ';
 				}
 			}
 		}
 		for( int i = 0; i < size; i++)
 		{
-			cin >> grid[i].length;
-			cin >> grid[i].orientation;
-			cin >> grid[i].yPos;
-			grid[i].yPos++;
-			cin >> grid[i].xPos;
-			grid[i].xPos++;
-			board[grid[i].xPos][grid[i].yPos] = 'x';
-			if(grid[i].orientation == 'H')
+			cin >> attempt.grid[i].length;
+			cin >> attempt.grid[i].orientation;
+			cin >> attempt.grid[i].yPos;
+			attempt.grid[i].yPos++;
+			cin >> attempt.grid[i].xPos;
+			attempt.grid[i].xPos++;
+			attempt.board[attempt.grid[i].xPos][attempt.grid[i].yPos] = 'x';
+			if(attempt.grid[i].orientation == 'H')
 			{
-				if(grid[i].length == 2)
+				if(attempt.grid[i].length == 2)
 				{
-					board[grid[i].xPos+1][grid[i].yPos] = 'x';
+					attempt.board[attempt.grid[i].xPos+1][attempt.grid[i].yPos] = 'x';
 				}
 				else
 				{
-					board[grid[i].xPos+1][grid[i].yPos] = 'x';
-					board[grid[i].xPos+2][grid[i].yPos] = 'x';
+					attempt.board[attempt.grid[i].xPos+1][attempt.grid[i].yPos] = 'x';
+					attempt.board[attempt.grid[i].xPos+2][attempt.grid[i].yPos] = 'x';
 				}
 			}
 			else
 			{
-				if(grid[i].length == 2)
+				if(attempt.grid[i].length == 2)
 				{
-					board[grid[i].xPos][grid[i].yPos+1] = 'x';
+					attempt.board[attempt.grid[i].xPos][attempt.grid[i].yPos+1] = 'x';
 				}
-				if(grid[i].length == 3)
+				if(attempt.grid[i].length == 3)
 				{
-					board[grid[i].xPos][grid[i].yPos+1] = 'x';
-					board[grid[i].xPos][grid[i].yPos+2] = 'x';
+					attempt.board[attempt.grid[i].xPos][attempt.grid[i].yPos+1] = 'x';
+					attempt.board[attempt.grid[i].xPos][attempt.grid[i].yPos+2] = 'x';
 				}
 			}
 		}
 		int best = 40;
 		int moves = 0;
-		string key = makeString(board,size);
-		boards.push(board);
+		string key = makeString(attempt.board);
+		boards.push(attempt);
 		dejaVu.insert(pair<string, int>(key,1));
-		char** temp = NULL;
+		puzzle temp;
 
 		while(!boards.empty())
 		{
-			copyBoard(boards.front(), temp, size);
-			boards.pop();
-			if(checkSoln()
+			
+			copyPuzzle(boards.front(), temp, size);
+			if(checkSoln(temp))
 			{
 				break;
 			}
 			for(int i = 0; i < size; i++)
 			{
-				if(moveForward(grid, i, temp)
+				if(moveForward(temp.grid, i, temp.board))
+				{
+					string tempKey = makeString(temp.board);
+					map<string, int>::iterator it;
+					it = dejaVu.find(tempKey);
+					if(it == dejaVu.end())
+					{
+						temp.moves++;
+						boards.push(temp);
+						dejaVu.insert(pair<string, int>(tempKey,1));
+					}
+					moveBackward(temp.grid, i , temp.board);
+				}
+				if(moveBackward(temp.grid, i, temp.board))
+				{
+					string tempKey = makeString(temp.board);
+					map<string, int>::iterator it;
+					it = dejaVu.find(tempKey);
+					if(it == dejaVu.end())
+					{
+						temp.moves++;
+						boards.push(temp);
+						dejaVu.insert(pair<string, int>(tempKey,1));
+					}
+					moveForward(temp.grid, i , temp.board);
+				}
 			}
 		}
 
 		cin >> size;
-		delete[] grid;
+		delete[] attempt.grid;
 		for(int i = 0; i < 8; i++)
 		{
-			delete[] board[i];
+			delete[] attempt.board[i];
 		}
 	}
 }
@@ -327,26 +362,32 @@ void printGrid(char** toPrint)
 	}
 }
 
-string makeString(char** b, int size)
+string makeString(char** b)
 {
 	string temp;
-	for(int i = 0; i < size; i++)
+	for(int i = 0; i < 6; i++)
 	{
 		temp += b[i];
 	}
 }
-
-void copyBoard(char** a, char** b,int size)
+void copyPuzzle(puzzle a, puzzle  b, int size)
 {
-	b = new char*[size];
-	for(int i = 0; i < size; i++)
+	b.grid = new car[size];
+	b.board = new char*[6];
+	b.moves = a.moves;
+
+	for(int i = 0; i < 6; i++)
 	{
-		b[i] = new char[size];
-		for(int j = 0; j < size; j++)
+		b.grid[i] = a.grid[i];
+		b.board[i] = new char[6];
+		for(int j = 0; j < 6; j++)
 		{
-			b[i][j] = a[i][j];
+			b.board[i][j] = a.board[i][j];
 		}
 	}
 }
 
-bool checkSoln(char** board, size);
+bool checkSoln(puzzle test)
+{
+	
+}
