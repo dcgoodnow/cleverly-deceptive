@@ -131,11 +131,12 @@ int main()
 	queue<puzzle> boards;
 	map<string, int> dejaVu;
 	cin >> size;
+	puzzle attempt;
 	while(size != 0)
 	{
-		puzzle attempt;
 		attempt.grid = new car[size];
 		attempt.board = new char*[8];
+		attempt.moves = 0;
 		for(int i = 0; i < 8; i++)
 		{
 			attempt.board[i] = new char[8];
@@ -235,6 +236,10 @@ int main()
 			}
 		}
 
+		while(!boards.empty())
+		{
+			boards.pop();
+		}
 		cin >> size;
 		delete[] attempt.grid;
 		for(int i = 0; i < 8; i++)
@@ -242,6 +247,24 @@ int main()
 			delete[] attempt.board[i];
 		}
 		delete[] attempt.board;
+		attempt.grid = NULL;
+		attempt.board = NULL;
+		delete[] forward.grid;
+		for(int i = 0; i < 8; i++)
+		{
+			delete[] forward.board[i];
+		}
+		delete[] forward.board;
+		forward.grid = NULL;
+		forward.board = NULL;
+		delete[] backward.grid;
+		for(int i = 0; i < 8; i++)
+		{
+			delete[] backward.board[i];
+		}
+		delete[] backward.board;
+		backward.grid = NULL;
+		backward.board = NULL;
 		scenario++;
 	}
 }
