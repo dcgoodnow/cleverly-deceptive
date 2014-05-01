@@ -96,21 +96,15 @@ bool moveBackward(car*, int, char**);
  * @post A solution is provided.
  *
 **/
-bool solve(car*, char**, int, int&, int&);
 
-/**
- * @name Print Grid
- * @brief Prints a visual representation of the playing board.
- * @detail Loops through the two-dimensional board array printing each column
- * of each row.
+/*
+ * @name Make String
+ * @brief converts a 2d array of characters into a string (1d array of chars)
  *
- * @param toPrint The board to be printed
+ * @param toString 2d array to convert
  *
- * @pre Board is loaded.
- * @post Board is printed to stdout.
-**/
-void printGrid(char**);
-
+ * @retval the string to return
+*/
 string makeString(char**);
 
 
@@ -120,8 +114,24 @@ struct puzzle{
 	int moves;
 };
 
+/*
+ * @name Copy Puzzle
+ * @brief copies all values of one puzzle to another
+ *
+ * @param a puzzle to copy from
+ * @param b puzzle to copy to
+ * @param size Number of cars in puzzle
+ *
+*/
 void copyPuzzle(puzzle a, puzzle&  b, int size);
 
+/**
+ * @name Check Solution
+ * @brief checks if a puzzle is a solution to the puzzle
+ *
+ * @param test the puzzle to be tested
+ * @retval True if the solution, false if not
+*/
 bool checkSoln(puzzle& test);
 	
 int main()
@@ -347,33 +357,6 @@ bool moveBackward(car* cars, int carNumber, char** board)
 	}
 }
 
-bool solve(car* cars, char** board, int numCars, int& best, int& moves)
-{
-	if(cars[0].xPos == 5)
-	{
-		best = moves;
-		return true;
-	}
-	else if(moves >= best)
-	{
-		return false;
-	}
-	for(int i = 0; i<numCars; i++)
-	{
-		if(moveForward(cars, i, board))
-		{
-			moves++;
-			solve( cars, board, numCars, best, moves);
-			moveBackward(cars, i, board);
-		}
-		if(moveBackward(cars, i, board))
-		{
-			moves++;
-			solve( cars, board, numCars, best, moves);
-			moveForward(cars, i, board);
-		}
-	}
-}
 
 
 void printGrid(char** toPrint)
